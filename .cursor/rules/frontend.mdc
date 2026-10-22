@@ -1,0 +1,25 @@
+---
+description: Reglas para el frontend (componentes, estilos y estructura)
+globs: src/**/*.tsx, src/**/*.css
+alwaysApply: false
+---
+
+# Stack
+- Next.js 15 (App Router), TypeScript estricto, Tailwind CSS, shadcn/ui
+- Iconos: lucide-react
+
+# Reglas de código
+- Usa componentes funcionales y hooks; nada de clases.
+- Server Components por defecto; "use client" solo si hace falta.
+- No instales librerías nuevas sin preguntarme antes.
+- Estilos solo con Tailwind; no CSS inline ni archivos CSS nuevos.
+- Usa las variables de color del tema (bg-background, text-foreground), no colores hexadecimales fijos.
+
+# Estructura
+- Componentes en `src/components/`, uno por archivo, nombre en PascalCase.
+- Textos de la UI en español.
+
+# Calidad
+- Diseño responsive, mobile-first.
+- Incluye estados de carga, error y vacío.
+- Accesibilidad básica: etiquetas, alt en imágenes, contraste suficiente.

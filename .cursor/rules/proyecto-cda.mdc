@@ -1,0 +1,36 @@
+---
+description: Contexto del Sistema Web CDA en Laravel
+alwaysApply: true
+---
+
+# Sistema Web CDA (Laravel)
+
+Este repo es la reescritura de **Sistema Web** (PHP puro + Bootstrap) a Laravel + Tailwind.
+
+La aplicación es el panel interno de CDA. La interfaz y los mensajes van en español. Zona horaria: `America/Guayaquil`.
+
+## Base de datos compartida
+
+Laravel usa **la misma MySQL** que el PHP legado. No recrear el esquema.
+
+- Tablas y columnas ya existen y están en español (`usuarios`, `inscripciones`, `creado_en`).
+- No crear migrations que alteren tablas o columnas salvo petición explícita.
+- Mapear con Eloquent: `ModeloCda` usa `CREATED_AT = creado_en` y no tiene `updated_at`.
+
+```php
+// ❌ BAD — esquema nuevo de Laravel
+Schema::create('users', function (Blueprint $table) {
+    $table->id();
+    $table->timestamps();
+});
+
+// ✅ GOOD — modelo sobre la tabla existente
+class Evento extends ModeloCda
+{
+    protected $table = 'eventos';
+}
+```
+
+## Referencia
+
+El comportamiento correcto está en `/Applications/XAMPP/xamppfiles/htdocs/Sistema Web`. Copiar lógica de ahí; no inventar tablas ni flujos distintos.

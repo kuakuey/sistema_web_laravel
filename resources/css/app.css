@@ -1,0 +1,227 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* El modo oscuro se activa con data-theme="dark" en <html> (botón de tema). */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/*
+ * Paleta fría (acero / pizarra). Todo el color de la interfaz sale de estas
+ * variables, así el modo oscuro solo redefine valores y no duplica clases.
+ */
+:root {
+    color-scheme: light;
+
+    --canvas: oklch(0.975 0.005 250);
+    --surface: oklch(1 0 0);
+    --surface-2: oklch(0.96 0.007 250);
+    --line: oklch(0.915 0.01 252);
+    --ink: oklch(0.26 0.025 258);
+    --muted: oklch(0.55 0.025 255);
+
+    --accent: oklch(0.52 0.11 248);
+    --accent-strong: oklch(0.45 0.115 250);
+    --accent-soft: oklch(0.955 0.02 245);
+    --accent-ink: oklch(0.99 0 0);
+
+    --success: oklch(0.5 0.1 165);
+    --success-soft: oklch(0.955 0.03 165);
+    --warning: oklch(0.5 0.1 75);
+    --warning-soft: oklch(0.96 0.04 88);
+    --danger: oklch(0.52 0.17 22);
+    --danger-soft: oklch(0.96 0.025 20);
+}
+
+[data-theme='dark'] {
+    color-scheme: dark;
+
+    --canvas: oklch(0.175 0.016 257);
+    --surface: oklch(0.21 0.018 257);
+    --surface-2: oklch(0.255 0.02 257);
+    --line: oklch(0.31 0.022 257);
+    --ink: oklch(0.95 0.006 250);
+    --muted: oklch(0.7 0.022 255);
+
+    --accent: oklch(0.74 0.1 240);
+    --accent-strong: oklch(0.8 0.09 240);
+    --accent-soft: oklch(0.29 0.045 248);
+    --accent-ink: oklch(0.18 0.02 257);
+
+    --success: oklch(0.78 0.11 165);
+    --success-soft: oklch(0.3 0.05 165);
+    --warning: oklch(0.82 0.12 88);
+    --warning-soft: oklch(0.32 0.05 85);
+    --danger: oklch(0.76 0.14 22);
+    --danger-soft: oklch(0.3 0.06 20);
+}
+
+@theme inline {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-canvas: var(--canvas);
+    --color-surface: var(--surface);
+    --color-surface-2: var(--surface-2);
+    --color-line: var(--line);
+    --color-ink: var(--ink);
+    --color-muted: var(--muted);
+
+    --color-accent: var(--accent);
+    --color-accent-strong: var(--accent-strong);
+    --color-accent-soft: var(--accent-soft);
+    --color-accent-ink: var(--accent-ink);
+
+    --color-success: var(--success);
+    --color-success-soft: var(--success-soft);
+    --color-warning: var(--warning);
+    --color-warning-soft: var(--warning-soft);
+    --color-danger: var(--danger);
+    --color-danger-soft: var(--danger-soft);
+}
+
+@layer base {
+    html {
+        font-feature-settings: 'cv11', 'ss01';
+        scroll-behavior: smooth;
+    }
+
+    ::selection {
+        background: var(--accent-soft);
+        color: var(--accent);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    /* Tailwind `flex` en un <dialog> anula el display:none nativo y los deja
+       visibles en el flujo de la página. Forzar ocultos si no están abiertos. */
+    dialog:not([open]) {
+        display: none !important;
+    }
+}
+
+@layer components {
+    .input {
+        @apply block h-10 w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink transition;
+        @apply placeholder:text-muted/70;
+        @apply hover:border-muted/40;
+        @apply focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15;
+        @apply disabled:cursor-not-allowed disabled:opacity-60;
+    }
+
+    textarea.input {
+        @apply h-auto min-h-20 py-2.5 leading-relaxed;
+    }
+
+    select.input {
+        @apply pr-8;
+    }
+
+    .data-table {
+        @apply w-full text-left text-sm;
+    }
+
+    .data-table thead th {
+        @apply whitespace-nowrap border-b border-line bg-surface-2/60 px-4 py-3 text-xs font-medium tracking-wide text-muted;
+    }
+
+    .data-table tbody tr {
+        @apply border-b border-line/70 transition-colors last:border-b-0 hover:bg-surface-2/50;
+    }
+
+    .data-table tbody td {
+        @apply whitespace-nowrap px-4 py-3.5 align-middle text-ink;
+    }
+
+    .data-table tbody td.celda-wrap {
+        @apply whitespace-normal;
+    }
+
+    .link-whatsapp {
+        @apply inline-flex items-center gap-1 text-left text-accent hover:underline;
+    }
+
+    dialog {
+        text-align: left;
+    }
+
+    .sidebar-tip {
+        @apply pointer-events-none invisible absolute left-full top-1/2 z-50 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-xs font-medium text-canvas opacity-0 shadow-lg;
+    }
+
+    .sidebar-collapse-closed {
+        display: none;
+    }
+}
+
+@media (min-width: 1024px) {
+    .app-shell {
+        transition: grid-template-columns 200ms ease;
+    }
+
+    html[data-sidebar='collapsed'] .app-shell {
+        grid-template-columns: 4.5rem minmax(0, 1fr);
+    }
+
+    html[data-sidebar='collapsed'] .app-sidebar {
+        width: 4.5rem;
+        overflow: visible;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-header {
+        justify-content: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-logo {
+        display: none;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-nav,
+    html[data-sidebar='collapsed'] .sidebar-footer {
+        overflow: visible;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-label,
+    html[data-sidebar='collapsed'] .sidebar-submenu {
+        display: none;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-link,
+    html[data-sidebar='collapsed'] .sidebar-user {
+        justify-content: center;
+        gap: 0.25rem;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-user {
+        flex-direction: column;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-collapse-open {
+        display: none;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-collapse-closed {
+        display: inline;
+    }
+
+    html[data-sidebar='collapsed'] .sidebar-link:hover .sidebar-tip,
+    html[data-sidebar='collapsed'] .sidebar-link:focus-visible .sidebar-tip,
+    html[data-sidebar='collapsed'] [data-theme-toggle]:hover .sidebar-tip,
+    html[data-sidebar='collapsed'] [data-theme-toggle]:focus-visible .sidebar-tip,
+    html[data-sidebar='collapsed'] [data-sidebar-collapse]:hover .sidebar-tip,
+    html[data-sidebar='collapsed'] [data-sidebar-collapse]:focus-visible .sidebar-tip {
+        visibility: visible;
+        opacity: 1;
+    }
+}
