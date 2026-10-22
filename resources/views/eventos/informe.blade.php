@@ -5,6 +5,8 @@
 
 <x-ui.page-header :title="'Informe · '.$evento->nombre" :subtitle="optional($evento->fecha)->format('d/m/Y')">
   <x-slot:actions>
+    <x-ui.button href="{{ route('eventos.informe.pdf', $evento) }}" icon="bi-file-earmark-pdf">PDF</x-ui.button>
+    <x-ui.button href="{{ route('eventos.informe.excel', $evento) }}" variant="secondary" icon="bi-file-earmark-excel">Excel</x-ui.button>
     <x-ui.button type="button" variant="secondary" icon="bi-printer" onclick="window.print()">Imprimir</x-ui.button>
     <x-ui.button href="{{ route('eventos.participantes', $evento->slug()) }}" variant="secondary">Volver</x-ui.button>
   </x-slot:actions>

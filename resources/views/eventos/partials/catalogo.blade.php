@@ -37,6 +37,8 @@
           <td>
             <div class="flex items-center justify-end gap-1">
               @if ($puedeVerInforme)
+                <x-ui.button href="{{ route('eventos.informe.pdf', $evento) }}" size="sm" variant="ghost" icon="bi-file-earmark-pdf" aria-label="Descargar PDF"></x-ui.button>
+                <x-ui.button href="{{ route('eventos.informe.excel', $evento) }}" size="sm" variant="ghost" icon="bi-file-earmark-excel" aria-label="Descargar Excel"></x-ui.button>
                 <x-ui.button href="{{ route('eventos.informe', $evento) }}" size="sm" variant="ghost" icon="bi-file-earmark-text" aria-label="Informe"></x-ui.button>
               @endif
               @if ($puedeAgregar)

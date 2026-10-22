@@ -5,18 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\CalendarioEvento;
 use App\Models\CasaVida;
 use App\Models\Consejeria;
+use App\Models\Evento;
 use App\Models\NetworkingEmprendedor;
 use App\Models\Ofrenda;
 use App\Models\ValorAdicional;
 use App\Support\Actividad;
 use App\Support\Eventos;
+use App\Support\Informes;
 use App\Support\Permisos;
 use App\Support\Texto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
+use RuntimeException;
 use Throwable;
 
 class ModuloController extends Controller
@@ -312,34 +319,91 @@ class ModuloController extends Controller
     {
         $this->exigir($request, 'generar_informe');
 
-        $resumen = [];
-        $errorBd = null;
+        $rol = $request->user()->rolNormalizado();
+        $secciones = Informes::secciones($rol);
+
+        if ($secciones === []) {
+            return redirect(Permisos::urlInicio($rol));
+        }
+
+        $filtros = Informes::filtros($request->query());
+        $seccion = isset($secciones[$filtros['seccion']]) ? $filtros['seccion'] : (string) array_key_first($secciones);
+        $eventos = collect();
 
         try {
-            $resumen = [
-                'Inscripciones' => DB::table('inscripciones')->count(),
-                'Presentaciones de niños' => DB::table('presentaciones_ninos')->count(),
-                'Ofrendas' => number_format((float) DB::table('ofrendas')->sum('monto'), 2),
-                'Valores adicionales' => number_format((float) DB::table('valores_adicionales')->where('tipo', '!=', Eventos::TIPO)->sum('valor'), 2),
-                'Eventos' => DB::table('eventos')->count(),
-                'Participantes de eventos' => DB::table('valores_adicionales')->whereNotNull('evento_id')->count(),
-                'Consejerías' => DB::table('consejerias')->count(),
-                'Networking' => DB::table('networking_emprendedores')->count(),
-            ];
+            $eventos = Evento::query()->where('habilitado', 1)->withCount('registros')->orderBy('nombre')->get();
         } catch (Throwable) {
-            $errorBd = 'No se pudo calcular el resumen.';
+            $eventos = collect();
         }
 
         return view('panel.informe', [
             'seccionActiva' => 'generar_informe',
             'titulo' => 'Generar informe',
-            'resumen' => $resumen,
-            'errorBd' => $errorBd,
+            'secciones' => $secciones,
+            'seccion' => $seccion,
+            'soloEventos' => array_keys($secciones) === ['eventos'],
+            'fechaDesde' => $filtros['fecha_desde'],
+            'fechaHasta' => $filtros['fecha_hasta'],
+            'turno' => $filtros['turno'],
+            'eventoId' => $filtros['evento_id'],
+            'eventos' => $eventos,
+            'mostrarSinEntregar' => $seccion === 'ofrendas' && $filtros['mostrar_sin_entregar'],
+            'turnos' => Informes::turnos(),
+            'etiquetasPresentacion' => Informes::etiquetasPresentacion(),
+            'estadosPresentacion' => $filtros['estados_presentacion'] !== [] ? $filtros['estados_presentacion'] : Informes::estadosPresentacion(),
+            'estadosBautismo' => Informes::estadosBautismo(),
+            'estadoBautismo' => $filtros['estado_bautismo'],
         ]);
     }
 
+    public function descargarInforme(Request $request): Response|RedirectResponse
+    {
+        $this->exigir($request, 'generar_informe');
+
+        try {
+            $informe = Informes::generar($request->user()->rolNormalizado(), $request->query());
+        } catch (InvalidArgumentException $e) {
+            return redirect()->route('informes', $request->query())->with('error', $e->getMessage());
+        } catch (QueryException|RuntimeException) {
+            return redirect()->route('informes', $request->query())->with('error', 'No se pudo generar el informe. Verifica que existan las tablas necesarias.');
+        }
+
+        Actividad::registrar(
+            'generar_informe',
+            'generar_informe',
+            'informe',
+            ($informe['evento_id'] ?? 0) > 0 ? (int) $informe['evento_id'] : null,
+            'Generar informe · '.($informe['seccion_exportacion'] ?? 'completo').' · pdf',
+        );
+
+        return Informes::descargar($informe);
+    }
+
+    public function descargarExcel(Request $request): Response|RedirectResponse
+    {
+        $this->exigir($request, 'generar_informe');
+
+        try {
+            $informe = Informes::generar($request->user()->rolNormalizado(), $request->query());
+        } catch (InvalidArgumentException $e) {
+            return redirect()->route('informes', $request->query())->with('error', $e->getMessage());
+        } catch (QueryException|RuntimeException) {
+            return redirect()->route('informes', $request->query())->with('error', 'No se pudo generar el informe. Verifica que existan las tablas necesarias.');
+        }
+
+        Actividad::registrar(
+            'generar_informe',
+            'generar_informe',
+            'informe',
+            ($informe['evento_id'] ?? 0) > 0 ? (int) $informe['evento_id'] : null,
+            'Generar informe · '.($informe['seccion_exportacion'] ?? 'completo').' · excel',
+        );
+
+        return Informes::excel($informe);
+    }
+
     /**
-     * @return \Illuminate\Support\Collection<int, CasaVida>
+     * @return Collection<int, CasaVida>
      */
     private function casasOfrenda()
     {
@@ -383,7 +447,7 @@ class ModuloController extends Controller
         return $buscar === '' ? null : '%'.addcslashes($buscar, '%_\\').'%';
     }
 
-    private function paginar(callable $consulta): LengthAwarePaginator|null
+    private function paginar(callable $consulta): ?LengthAwarePaginator
     {
         try {
             return $consulta();

@@ -6,11 +6,15 @@ use App\Models\Evento;
 use App\Models\ValorAdicional;
 use App\Support\Actividad;
 use App\Support\Eventos;
+use App\Support\Informes;
 use App\Support\Permisos;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use InvalidArgumentException;
+use RuntimeException;
 use Throwable;
 
 class EventoController extends Controller
@@ -228,6 +232,62 @@ class EventoController extends Controller
             'recaudado' => $registros->where('estado_pago', 'pagado')->sum('valor'),
             'pendiente' => $registros->where('estado_pago', 'por_cancelar')->sum('valor'),
         ]);
+    }
+
+    public function descargarInforme(Request $request, Evento $evento): Response|RedirectResponse
+    {
+        abort_unless(Informes::puede($request->user()->rolNormalizado(), 'eventos'), 403);
+
+        try {
+            $informe = Informes::evento(
+                $evento->id,
+                (string) $request->query('fecha_desde', ''),
+                (string) $request->query('fecha_hasta', ''),
+                (string) $request->query('turno', 'todos'),
+            );
+        } catch (InvalidArgumentException $e) {
+            return back()->with('error', $e->getMessage());
+        } catch (QueryException|RuntimeException) {
+            return back()->with('error', 'No se pudo generar el informe del evento.');
+        }
+
+        Actividad::registrar(
+            'generar_informe',
+            'eventos',
+            'informe',
+            $evento->id,
+            'Informe de evento · '.$evento->nombre.' · pdf',
+        );
+
+        return Informes::descargar($informe);
+    }
+
+    public function descargarExcel(Request $request, Evento $evento): Response|RedirectResponse
+    {
+        abort_unless(Informes::puede($request->user()->rolNormalizado(), 'eventos'), 403);
+
+        try {
+            $informe = Informes::evento(
+                $evento->id,
+                (string) $request->query('fecha_desde', ''),
+                (string) $request->query('fecha_hasta', ''),
+                (string) $request->query('turno', 'todos'),
+            );
+        } catch (InvalidArgumentException $e) {
+            return back()->with('error', $e->getMessage());
+        } catch (QueryException|RuntimeException) {
+            return back()->with('error', 'No se pudo generar el informe del evento.');
+        }
+
+        Actividad::registrar(
+            'generar_informe',
+            'eventos',
+            'informe',
+            $evento->id,
+            'Informe de evento · '.$evento->nombre.' · excel',
+        );
+
+        return Informes::excel($informe);
     }
 
     /**

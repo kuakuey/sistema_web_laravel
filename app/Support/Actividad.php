@@ -86,6 +86,7 @@ class Actividad
             'crear_networking' => 'Registrar negocio',
             'sincronizar_bd' => 'Sincronizar base de datos',
             'limpiar_actividad_log' => 'Limpiar log de actividad',
+            'generar_informe' => 'Generar informe',
         ];
 
         asort($etiquetas, SORT_NATURAL | SORT_FLAG_CASE);

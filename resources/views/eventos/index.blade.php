@@ -32,6 +32,10 @@
   <x-ui.alert type="success" dismissible class="mb-6">{{ session('ok') }}</x-ui.alert>
 @endif
 
+@if (session('error'))
+  <x-ui.alert type="danger" dismissible class="mb-6">{{ session('error') }}</x-ui.alert>
+@endif
+
 @if ($errors->any())
   <x-ui.alert type="danger" dismissible class="mb-6">{{ $errors->first() }}</x-ui.alert>
 @endif

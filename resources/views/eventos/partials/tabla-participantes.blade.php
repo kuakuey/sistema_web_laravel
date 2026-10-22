@@ -22,6 +22,8 @@
     </div>
     <div class="flex gap-2">
       @if ($puedeVerInforme)
+        <x-ui.button href="{{ route('eventos.informe.pdf', $eventoParticipantes) }}" variant="secondary" icon="bi-file-earmark-pdf">PDF</x-ui.button>
+        <x-ui.button href="{{ route('eventos.informe.excel', $eventoParticipantes) }}" variant="secondary" icon="bi-file-earmark-excel">Excel</x-ui.button>
         <x-ui.button href="{{ route('eventos.informe', $eventoParticipantes) }}" variant="secondary" icon="bi-file-earmark-text">Informe</x-ui.button>
       @endif
       <x-ui.button href="{{ route('eventos.catalogo') }}" variant="secondary">Volver</x-ui.button>

@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/eventos/{evento}', [EventoController::class, 'eliminarEvento'])->name('eventos.eliminar');
     Route::delete('/eventos/{evento}/registros', [EventoController::class, 'vaciarRegistros'])->name('eventos.vaciar');
     Route::get('/eventos/{evento}/informe', [EventoController::class, 'informe'])->name('eventos.informe');
+    Route::get('/eventos/{evento}/informe.pdf', [EventoController::class, 'descargarInforme'])->name('eventos.informe.pdf');
+    Route::get('/eventos/{evento}/informe.xls', [EventoController::class, 'descargarExcel'])->name('eventos.informe.excel');
     Route::post('/eventos/participantes', [EventoController::class, 'guardarParticipante'])->name('eventos.participantes.guardar');
     Route::put('/eventos/participantes/{registro}', [EventoController::class, 'actualizarParticipante'])->name('eventos.participantes.actualizar');
     Route::delete('/eventos/participantes/{registro}', [EventoController::class, 'eliminarParticipante'])->name('eventos.participantes.eliminar');
@@ -84,6 +86,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/estructura/piramide/{nodo}', [EstructuraController::class, 'actualizarPiramide'])->name('estructura.piramide.actualizar');
     Route::delete('/estructura/piramide/{nodo}', [EstructuraController::class, 'eliminarPiramide'])->name('estructura.piramide.eliminar');
     Route::get('/generar-informe', [ModuloController::class, 'informes'])->name('informes');
+    Route::get('/generar-informe/pdf', [ModuloController::class, 'descargarInforme'])->name('informes.pdf');
+    Route::get('/generar-informe/excel', [ModuloController::class, 'descargarExcel'])->name('informes.excel');
     Route::get('/avanzado', [AvanzadoController::class, 'inicio'])->name('avanzado');
     Route::get('/avanzado/usuarios', [AvanzadoController::class, 'index'])->defaults('seccion', 'usuarios')->name('avanzado.usuarios.ver');
     Route::get('/avanzado/permisos', [AvanzadoController::class, 'index'])->defaults('seccion', 'permisos')->name('avanzado.permisos.ver');
