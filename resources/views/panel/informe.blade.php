@@ -1,6 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+  $seccionInicial = array_key_exists('completo', $secciones) ? 'completo' : (string) array_key_first($secciones);
+  $estadosDefecto = array_keys($etiquetasPresentacion);
+  $estadosActuales = $estadosPresentacion;
+  sort($estadosDefecto);
+  sort($estadosActuales);
+  $hayFiltros = $fechaDesde !== ''
+      || $fechaHasta !== ''
+      || $turno !== 'todos'
+      || $seccion !== $seccionInicial
+      || ($seccion === 'eventos' && $eventoId > 0)
+      || $mostrarSinEntregar
+      || ($seccion === 'bautismos' && $estadoBautismo !== 'todos')
+      || ($seccion === 'presentaciones' && $estadosActuales !== $estadosDefecto);
+@endphp
+
 <x-ui.page-header title="Generar informe" subtitle="Elige el informe, aplica los filtros y descárgalo en PDF o Excel" />
 
 @if (session('error'))
@@ -8,10 +24,6 @@
 @endif
 
 <x-ui.card title="Descargar informe">
-  <p class="mb-5 text-sm text-muted">
-    El informe filtra por la fecha en que se registró cada ofrenda, evento, valor adicional o persona,
-    no por la fecha de la ofrenda, del evento o del bautizo. Si dejas las fechas vacías, se incluyen todos los registros.
-  </p>
 
   <form method="GET" action="{{ route('informes.pdf') }}" id="formInforme" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
     <x-ui.field label="Desde" name="fecha_desde" class="sm:col-span-1">
@@ -87,10 +99,13 @@
     </div>
 
     <div class="flex flex-wrap items-center gap-2 sm:col-span-2 xl:col-span-4">
-      <x-ui.button type="submit" icon="bi-file-earmark-pdf">Descargar PDF</x-ui.button>
-      <x-ui.button type="submit" variant="secondary" icon="bi-file-earmark-excel" formaction="{{ route('informes.excel') }}">Descargar Excel</x-ui.button>
-      <x-ui.button href="{{ route('informes') }}" variant="secondary" icon="bi-x-circle">Limpiar filtros</x-ui.button>
-      <p class="w-full text-xs text-muted">El Excel incluye todos los campos de cada registro: teléfonos, fechas, estados, asistencia y datos adicionales.</p>
+      <div class="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
+        <x-ui.button type="submit" icon="bi-file-earmark-pdf" class="w-full justify-center !px-2 !text-xs sm:w-auto sm:!px-4 sm:!text-sm">PDF</x-ui.button>
+        <x-ui.button type="submit" variant="secondary" icon="bi-file-earmark-excel" class="w-full justify-center !px-2 !text-xs sm:w-auto sm:!px-4 sm:!text-sm" formaction="{{ route('informes.excel') }}">Excel</x-ui.button>
+      </div>
+      <span id="limpiarFiltros" @unless ($hayFiltros) hidden @endunless>
+        <x-ui.button href="{{ route('informes') }}" variant="secondary" icon="bi-x-circle">Limpiar filtros</x-ui.button>
+      </span>
     </div>
   </form>
 </x-ui.card>
@@ -107,6 +122,9 @@
       bautismos: document.querySelector('[data-campo="bautismos"]')
     };
     var formulario = document.getElementById('formInforme');
+    var limpiar = document.getElementById('limpiarFiltros');
+    var seccionInicial = @json($seccionInicial);
+    var estadosDefecto = @json(array_keys($etiquetasPresentacion)).slice().sort();
 
     function actual() {
       if (soloEventos) {
@@ -133,10 +151,62 @@
           casilla.checked = false;
         }
       }
+      sincronizarLimpiar();
+    }
+
+    function hayFiltro() {
+      var valor = actual();
+      var desde = document.getElementById('fecha_desde');
+      var hasta = document.getElementById('fecha_hasta');
+      var jornada = document.getElementById('turno');
+
+      if ((desde && desde.value) || (hasta && hasta.value) || (jornada && jornada.value !== 'todos') || valor !== seccionInicial) {
+        return true;
+      }
+
+      if (valor === 'eventos' && evento && evento.value) {
+        return true;
+      }
+
+      if (valor === 'ofrendas') {
+        var sinEntregar = document.getElementById('mostrar_sin_entregar');
+        if (sinEntregar && sinEntregar.checked) {
+          return true;
+        }
+      }
+
+      if (valor === 'bautismos') {
+        var estado = document.getElementById('estado_bautismo');
+        if (estado && estado.value !== 'todos') {
+          return true;
+        }
+      }
+
+      if (valor === 'presentaciones') {
+        var marcados = Array.from(document.querySelectorAll('[data-estado-presentacion]:checked'), function (casilla) {
+          return casilla.value;
+        }).sort();
+
+        return marcados.length !== estadosDefecto.length || marcados.some(function (clave, indice) {
+          return clave !== estadosDefecto[indice];
+        });
+      }
+
+      return false;
+    }
+
+    function sincronizarLimpiar() {
+      if (limpiar) {
+        limpiar.hidden = !hayFiltro();
+      }
     }
 
     if (seccion && seccion.tagName === 'SELECT') {
       seccion.addEventListener('change', actualizar);
+    }
+    if (formulario) {
+      formulario.addEventListener('input', sincronizarLimpiar);
+      formulario.addEventListener('change', sincronizarLimpiar);
     }
     actualizar();
 

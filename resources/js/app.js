@@ -65,7 +65,7 @@ function abrirMenu(abrir) {
 
     menu.classList.toggle('-translate-x-full', !abrir);
     velo.classList.toggle('hidden', !abrir);
-    document.body.classList.toggle('overflow-hidden', abrir);
+    document.body.classList.toggle('overflow-y-hidden', abrir);
 }
 
 document.querySelectorAll('[data-sidebar-toggle]').forEach((boton) => {
@@ -85,6 +85,18 @@ window.matchMedia('(min-width: 1024px)').addEventListener('change', (evento) => 
     if (evento.matches) {
         abrirMenu(false);
     }
+});
+
+/* Filtros colapsables en móvil */
+document.querySelectorAll('[data-filters-toggle]').forEach((boton) => {
+    const panel = boton.closest('.filters-panel');
+
+    boton.addEventListener('click', () => {
+        const abierto = boton.getAttribute('aria-expanded') === 'true';
+
+        boton.setAttribute('aria-expanded', abierto ? 'false' : 'true');
+        panel?.classList.toggle('is-open', !abierto);
+    });
 });
 
 /* Mostrar / ocultar contraseña */

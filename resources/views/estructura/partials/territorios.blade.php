@@ -1,10 +1,12 @@
-<form method="GET" class="mb-5 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
+<x-ui.filters>
+<form method="GET" class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
   <div class="relative">
     <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true"></i>
     <input class="input pl-9" type="search" name="buscar" value="{{ $buscar }}" placeholder="Categoría o ministerio" aria-label="Buscar ministerios">
   </div>
   <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Buscar</x-ui.button>
 </form>
+</x-ui.filters>
 
 <x-ui.card flush>
   @if ($registros->count() === 0)

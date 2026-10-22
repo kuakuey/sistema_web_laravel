@@ -31,12 +31,14 @@
   </div>
 @endif
 
-<form method="GET" action="{{ $actionFiltro }}" class="mb-5 grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]">
+<x-ui.filters>
+<form method="GET" action="{{ $actionFiltro }}" class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]">
   <input class="input" type="search" name="buscar" value="{{ $buscar }}" placeholder="Buscar nombre, teléfono o numeración">
   <input class="input" type="date" name="fecha_desde" value="{{ request('fecha_desde') }}" aria-label="Desde">
   <input class="input" type="date" name="fecha_hasta" value="{{ request('fecha_hasta') }}" aria-label="Hasta">
   <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Filtrar</x-ui.button>
 </form>
+</x-ui.filters>
 
 <x-ui.card flush>
   @if (! $registros || $registros->count() === 0)

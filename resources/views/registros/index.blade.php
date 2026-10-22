@@ -38,7 +38,8 @@
   <x-ui.alert type="warning">{{ $errorBd }}</x-ui.alert>
 @else
   @if ($seccion !== 'generales')
-    <form method="GET" class="mb-5 grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]">
+    <x-ui.filters>
+    <form method="GET" class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]">
       <div class="relative">
         <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true"></i>
         <input class="input pl-9" type="search" name="buscar" value="{{ $buscar }}" placeholder="Buscar por nombre, teléfono o correo" aria-label="Buscar">
@@ -47,6 +48,7 @@
       <input class="input" type="date" name="fecha_hasta" value="{{ request('fecha_hasta') }}" aria-label="Hasta">
       <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Filtrar</x-ui.button>
     </form>
+    </x-ui.filters>
   @endif
 
   <x-ui.card flush>

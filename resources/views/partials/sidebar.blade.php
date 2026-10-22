@@ -7,7 +7,7 @@
 @endphp
 <aside
   id="appSidebar"
-  class="app-sidebar fixed inset-y-0 left-0 z-40 flex w-64 -translate-x-full flex-col border-r border-line bg-surface transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0"
+  class="app-sidebar fixed inset-y-0 left-0 z-40 flex w-64 max-w-full -translate-x-full flex-col overflow-x-clip border-r border-line bg-surface transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0"
   aria-label="Navegación principal"
 >
   <div class="sidebar-header flex h-16 shrink-0 items-center gap-3 px-4">
@@ -28,7 +28,7 @@
     </button>
   </div>
 
-  <nav class="sidebar-nav flex-1 space-y-0.5 overflow-y-auto px-3 py-2">
+  <nav class="sidebar-nav min-w-0 flex-1 space-y-0.5 overflow-x-hidden overflow-y-auto px-3 py-2">
     @php
       $submenus = $menusLaterales ?? [
         'estructura' => $menuEstructura ?? [],
@@ -45,30 +45,30 @@
         href="{{ \App\Support\Permisos::url($claveSeccion) }}"
         @if ($activo && $claveSubmenu === '') aria-current="page" @endif
         @class([
-          'sidebar-link group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition',
+          'sidebar-link group relative flex min-w-0 items-center gap-3 rounded-lg px-3 py-2 text-sm transition',
           'bg-accent-soft font-medium text-accent' => $activo,
           'text-muted hover:bg-surface-2 hover:text-ink' => ! $activo,
         ])
       >
         <i class="bi {{ $iconosMenu[$claveSeccion] ?? 'bi-file-text' }} w-4 shrink-0 text-center text-[0.95rem]" aria-hidden="true"></i>
-        <span class="sidebar-label truncate">{{ $etiqueta }}</span>
+        <span class="sidebar-label min-w-0 truncate">{{ $etiqueta }}</span>
         <span class="sidebar-tip" role="tooltip">{{ $etiqueta }}</span>
       </a>
       @if ($activo && ! empty($submenus[$claveSeccion] ?? []))
-        <div class="sidebar-submenu mb-1 ml-4 space-y-0.5 border-l border-line pl-2">
+        <div class="sidebar-submenu mb-1 ml-4 min-w-0 space-y-0.5 overflow-hidden border-l border-line pl-2">
           @foreach ($submenus[$claveSeccion] as $item)
             @php $subactivo = $claveSubmenu === $item['clave']; @endphp
             <a
               href="{{ route($item['ruta']) }}"
               @if ($subactivo) aria-current="page" @endif
               @class([
-                'flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition',
+                'flex min-w-0 items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition',
                 'bg-accent-soft font-medium text-accent' => $subactivo,
                 'text-muted hover:bg-surface-2 hover:text-ink' => ! $subactivo,
               ])
             >
               <i class="bi {{ $item['icono'] }} w-4 text-center text-[0.85rem]" aria-hidden="true"></i>
-              <span class="truncate">{{ $item['etiqueta'] }}</span>
+              <span class="min-w-0 truncate">{{ $item['etiqueta'] }}</span>
             </a>
           @endforeach
         </div>

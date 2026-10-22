@@ -3,7 +3,7 @@
 <head>
   @include('partials.head')
 </head>
-<body class="min-h-screen bg-canvas font-sans text-ink antialiased">
+<body class="min-h-screen overflow-x-clip bg-canvas font-sans text-ink antialiased">
   <div class="app-shell lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
     <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-ink/40 backdrop-blur-sm lg:hidden" aria-hidden="true"></div>
 

@@ -21,7 +21,8 @@
   </form>
 </div>
 
-<form method="GET" action="{{ route('avanzado.logs') }}" class="mb-5 grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_10rem_10rem_10rem_auto]">
+<x-ui.filters>
+<form method="GET" action="{{ route('avanzado.logs') }}" class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_10rem_10rem_10rem_auto]">
   <input class="input" type="search" name="buscar" value="{{ $filtrosLog['buscar'] }}" placeholder="Usuario, detalle…">
   <select class="input" name="accion" aria-label="Acción">
     <option value="">Todas las acciones</option>
@@ -39,6 +40,7 @@
   <input class="input" type="date" name="fecha_hasta" value="{{ $filtrosLog['fecha_hasta'] }}" aria-label="Hasta">
   <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Filtrar</x-ui.button>
 </form>
+</x-ui.filters>
 
 <x-ui.card flush>
   @if (! $logs || $logs->count() === 0)
