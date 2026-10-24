@@ -1,3 +1,7 @@
+/*
+ * Único CSS de la app (Vite). Colores, tipografía y componentes propios.
+ * Modo oscuro: data-theme="dark" en <html>.
+ */
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -6,14 +10,10 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-/* El modo oscuro se activa con data-theme="dark" en <html> (botón de tema). */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-/*
- * Paleta fría (acero / pizarra). Todo el color de la interfaz sale de estas
- * variables, así el modo oscuro solo redefine valores y no duplica clases.
- */
-:root {
+/* Paleta (claro). El bloque dark solo redefine valores. */
+/* :root {
     color-scheme: light;
 
     --canvas: oklch(0.975 0.005 250);
@@ -57,6 +57,60 @@
     --warning-soft: oklch(0.32 0.05 85);
     --danger: oklch(0.76 0.14 22);
     --danger-soft: oklch(0.3 0.06 20);
+} */
+
+:root {
+    color-scheme: light;
+
+    --canvas: oklch(0.975 0.008 235);
+    --surface: oklch(1 0 0);
+    --surface-2: oklch(0.955 0.014 235);
+    --line: oklch(0.905 0.022 235);
+    --ink: oklch(0.26 0.04 250);
+    --muted: oklch(0.52 0.04 245);
+
+    --accent: oklch(0.52 0.19 265);        /* #4169e1 */
+    --accent-strong: oklch(0.45 0.18 267);
+    --accent-text: oklch(0.47 0.17 265);   /* links y etiquetas sobre fondo claro */
+    --accent-soft: oklch(0.95 0.03 230);   /* derivado de #87ceeb */
+    --accent-ink: oklch(0.99 0 0);
+
+    --copper: oklch(0.64 0.12 65);         /* #cd7f32 */
+    --copper-soft: oklch(0.95 0.04 70);
+
+    --success: oklch(0.5 0.1 160);
+    --success-soft: oklch(0.955 0.03 160);
+    --warning: oklch(0.52 0.1 62);         /* cobre oscurecido para texto */
+    --warning-soft: oklch(0.95 0.045 75);
+    --danger: oklch(0.52 0.17 25);
+    --danger-soft: oklch(0.96 0.025 22);
+}
+
+[data-theme='dark'] {
+    color-scheme: dark;
+
+    --canvas: oklch(0.175 0.02 250);
+    --surface: oklch(0.21 0.022 250);
+    --surface-2: oklch(0.255 0.026 250);
+    --line: oklch(0.31 0.03 250);
+    --ink: oklch(0.95 0.008 235);
+    --muted: oklch(0.72 0.03 240);
+
+    --accent: oklch(0.82 0.1 235);         /* #87cefa */
+    --accent-strong: oklch(0.88 0.08 232);
+    --accent-text: oklch(0.84 0.09 235);
+    --accent-soft: oklch(0.3 0.06 250);
+    --accent-ink: oklch(0.18 0.03 250);
+
+    --copper: oklch(0.74 0.12 65);
+    --copper-soft: oklch(0.32 0.05 65);
+
+    --success: oklch(0.78 0.11 160);
+    --success-soft: oklch(0.3 0.05 160);
+    --warning: oklch(0.78 0.12 70);
+    --warning-soft: oklch(0.32 0.05 68);
+    --danger: oklch(0.76 0.14 25);
+    --danger-soft: oklch(0.3 0.06 22);
 }
 
 @theme inline {

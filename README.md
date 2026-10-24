@@ -58,7 +58,9 @@ Laravel usa **la misma base MySQL** que el sistema legado. No se recrea el esque
 - MySQL (misma BD del sistema legado)
 - Extensiones PHP habituales de Laravel (pdo_mysql, mbstring, openssl, etc.)
 
-## Instalación rápida
+## Instalación y actualización
+
+Guía completa (cPanel + local, primera vez y cada deploy): **[INSTALACION.md](INSTALACION.md)**
 
 ```bash
 composer install
