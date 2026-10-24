@@ -386,15 +386,71 @@ class ApiPresentaciones
      * @param  array<string, mixed>|null  $representante
      * @return array<string, mixed>|null
      */
+    /**
+     * Nombre corto para listas:
+     * 4+ palabras → 1ª y 3ª; 3 → 1ª y 2ª; 1–2 → completo.
+     */
+    public static function nombreCortoPersona(?string $nombre): string
+    {
+        $partes = array_values(array_filter(preg_split('/\s+/u', trim((string) $nombre)) ?: []));
+        $cantidad = count($partes);
+
+        if ($cantidad >= 4) {
+            return $partes[0].' '.$partes[2];
+        }
+
+        if ($cantidad === 3) {
+            return $partes[0].' '.$partes[1];
+        }
+
+        return implode(' ', $partes);
+    }
+
+    /**
+     * Representantes ordenados (padre, madre, resto) con nombre corto.
+     *
+     * @return array<int, array{clave: string, parentesco: string, nombre: string, telefono: string}>
+     */
+    public static function representantesLista(PresentacionNino $fila): array
+    {
+        $orden = ['padre' => 0, 'madre' => 1];
+        $items = [];
+
+        foreach ([1, 2] as $numero) {
+            $rep = self::formatearRepresentante($fila, $numero);
+
+            if ($rep === null) {
+                continue;
+            }
+
+            $nombre = self::nombreCortoPersona((string) ($rep['nombre'] ?? ''));
+
+            if ($nombre === '') {
+                continue;
+            }
+
+            $items[] = [
+                'clave' => (string) ($rep['parentesco'] ?? ''),
+                'parentesco' => (string) ($rep['parentesco_etiqueta'] ?? 'Representante'),
+                'nombre' => $nombre,
+                'telefono' => (string) ($rep['telefono'] ?? ''),
+            ];
+        }
+
+        usort($items, static function (array $a, array $b) use ($orden): int {
+            return ($orden[$a['clave']] ?? 99) <=> ($orden[$b['clave']] ?? 99);
+        });
+
+        return $items;
+    }
+
     private static function acortarRepresentante(?array $representante): ?array
     {
         if ($representante === null) {
             return null;
         }
 
-        $nombre = trim((string) ($representante['nombre'] ?? ''));
-        $partes = preg_split('/\s+/u', $nombre, 2) ?: [];
-        $nombreCorto = $partes[0] ?? $nombre;
+        $nombreCorto = self::nombreCortoPersona((string) ($representante['nombre'] ?? ''));
         $parentescoEtiqueta = (string) ($representante['parentesco_etiqueta'] ?? 'Representante');
 
         $representante['nombre'] = $nombreCorto;

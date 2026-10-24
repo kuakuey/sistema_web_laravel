@@ -25,35 +25,7 @@
       <ul class="divide-y divide-line" data-lista-entregar-diploma>
         @foreach ($registros as $registro)
           @php
-            $fila = ApiPresentaciones::formatear($registro);
-            $ordenParentesco = ['padre' => 0, 'madre' => 1];
-            $representantes = collect($fila['representantes'] ?? [])
-              ->map(function (array $rep) {
-                  $nombre = trim((string) ($rep['nombre'] ?? ''));
-                  if ($nombre === '') {
-                      return null;
-                  }
-
-                  $partes = array_values(array_filter(preg_split('/\s+/u', $nombre) ?: []));
-                  $cantidad = count($partes);
-
-                  if ($cantidad >= 4) {
-                      $corto = $partes[0].' '.$partes[2];
-                  } elseif ($cantidad === 3) {
-                      $corto = $partes[0].' '.$partes[1];
-                  } else {
-                      $corto = implode(' ', $partes);
-                  }
-
-                  return [
-                      'clave' => (string) ($rep['parentesco'] ?? ''),
-                      'parentesco' => $rep['parentesco_etiqueta'] ?? 'Representante',
-                      'nombre' => $corto,
-                  ];
-              })
-              ->filter()
-              ->sortBy(fn (array $rep) => $ordenParentesco[$rep['clave']] ?? 99)
-              ->values();
+            $representantes = ApiPresentaciones::representantesLista($registro);
           @endphp
           <li
             class="flex flex-col gap-3 px-5 py-4 transition hover:bg-surface-2/60 sm:flex-row sm:items-center sm:gap-4"
@@ -61,7 +33,7 @@
             data-id="{{ $registro->id }}"
           >
             <div class="min-w-0 flex-1">
-              <p class="text-base font-semibold leading-snug break-words text-ink">{{ $fila['nombre_presentado'] }}</p>
+              <p class="text-base font-semibold leading-snug break-words text-ink">{{ $registro->nombre_presentado }}</p>
               @foreach ($representantes as $rep)
                 <p class="mt-1 text-sm break-words text-muted">
                   {{ $rep['parentesco'] }}: {{ $rep['nombre'] }}
@@ -83,7 +55,7 @@
                 icon="check2-circle"
                 class="w-full sm:w-auto"
                 title="Entregar diploma"
-                aria-label="Entregar diploma a {{ $fila['nombre_presentado'] }}"
+                aria-label="Entregar diploma a {{ $registro->nombre_presentado }}"
               >
                 Entregar diploma
               </x-ui.button>

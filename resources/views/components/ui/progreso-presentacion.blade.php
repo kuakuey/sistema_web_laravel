@@ -22,28 +22,14 @@
 
     $esSuperadmin = Permisos::normalizarRol((string) (auth()->user()?->rolNormalizado() ?? '')) === Permisos::SUPERADMIN;
     $puedeAvanzar = $editable && $siguiente !== null;
-    $puedeRetroceder = $esSuperadmin && $anterior !== null;
+    $puedeRetroceder = $esSuperadmin && $anterior !== null && $estado !== 'presentado';
     $etiquetaSiguiente = $siguiente ? ApiPresentaciones::etiquetaEstado($siguiente) : '';
     $etiquetaAnterior = $anterior ? ApiPresentaciones::etiquetaEstado($anterior) : '';
 @endphp
 
 @if ($estado === 'presentado')
-  <div {{ $attributes->class('flex items-center gap-2')->merge(['data-progreso-presentacion' => '']) }}>
+  <div {{ $attributes->merge(['data-progreso-presentacion' => '']) }}>
     <x-ui.badge tone="success">Presentado</x-ui.badge>
-    @if ($puedeRetroceder)
-      <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" class="m-0 shrink-0" data-ajax-estado-presentacion>
-        @csrf
-        <input type="hidden" name="accion" value="retroceder">
-        <x-ui.button
-          type="submit"
-          size="sm"
-          variant="secondary"
-          icon="chevron-left"
-          title="Retroceder a {{ $etiquetaAnterior }}"
-          aria-label="Retroceder a {{ $etiquetaAnterior }}"
-        />
-      </form>
-    @endif
   </div>
 @else
   <div {{ $attributes->class('flex min-w-[12rem] max-w-[18rem] items-center gap-2')->merge(['data-progreso-presentacion' => '']) }}>

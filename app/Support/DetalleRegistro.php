@@ -109,22 +109,13 @@ class DetalleRegistro
     {
         $partes = [];
 
-        foreach ([1, 2] as $numero) {
-            $nombre = $numero === 1
-                ? trim((string) $registro->nombre_padre)
-                : trim((string) $registro->nombre_madre);
-            $telefono = $numero === 1
-                ? $registro->telefono_papa
-                : $registro->telefono_mama;
-
-            if (trim((string) $telefono) === '') {
+        foreach (ApiPresentaciones::representantesLista($registro) as $rep) {
+            if (trim($rep['telefono']) === '') {
                 continue;
             }
 
-            $etiqueta = $nombre !== ''
-                ? $nombre
-                : ($numero === 1 ? 'Representante' : 'Segundo representante');
-            $fila = self::whatsapp('Teléfono', $telefono, $etiqueta);
+            $etiqueta = $rep['nombre'] !== '' ? $rep['nombre'] : $rep['parentesco'];
+            $fila = self::whatsapp('Teléfono', $rep['telefono'], $etiqueta);
             $partes[] = ! empty($fila['html']) ? $fila['valor'] : e($fila['valor']);
         }
 
