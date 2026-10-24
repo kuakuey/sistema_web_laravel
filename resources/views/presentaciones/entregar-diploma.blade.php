@@ -25,29 +25,9 @@
       <ul class="divide-y divide-line" data-lista-entregar-diploma>
         @foreach ($registros as $registro)
           @php
-            $fila = ApiPresentaciones::formatearPublica($registro);
-            $partesNombre = preg_split('/\s+/u', trim((string) ($fila['nombre_presentado'] ?? ''))) ?: [];
-            $cantidad = count($partesNombre);
-
-            if ($cantidad <= 1) {
-                $nombres = $partesNombre[0] ?? '';
-                $apellidos = '';
-            } elseif ($cantidad === 2) {
-                $nombres = $partesNombre[0];
-                $apellidos = $partesNombre[1];
-            } else {
-                $apellidos = implode(' ', array_slice($partesNombre, -2));
-                $nombres = implode(' ', array_slice($partesNombre, 0, -2));
-            }
-
+            $fila = ApiPresentaciones::formatear($registro);
             $representantes = collect($fila['representantes'] ?? [])
-              ->map(function (array $rep) {
-                  $parentesco = $rep['parentesco_etiqueta'] ?? 'Representante';
-                  $nombre = trim((string) ($rep['nombre'] ?? ''));
-
-                  return $nombre !== '' ? $parentesco.': '.$nombre : null;
-              })
-              ->filter()
+              ->filter(fn (array $rep) => trim((string) ($rep['nombre'] ?? '')) !== '')
               ->values();
           @endphp
           <li
@@ -55,13 +35,12 @@
             data-presentacion-item
             data-id="{{ $registro->id }}"
           >
-            <div class="min-w-0 flex-1 break-words">
-              <p class="text-base font-semibold leading-snug text-ink">{{ $nombres }}</p>
-              @if ($apellidos !== '')
-                <p class="text-base font-semibold leading-snug text-ink">{{ $apellidos }}</p>
-              @endif
-              @foreach ($representantes as $linea)
-                <p class="mt-1 text-sm text-muted">{{ $linea }}</p>
+            <div class="min-w-0 flex-1">
+              <p class="text-base font-semibold leading-snug break-words text-ink">{{ $fila['nombre_presentado'] }}</p>
+              @foreach ($representantes as $rep)
+                <p class="mt-1 text-sm break-words text-muted">
+                  {{ $rep['parentesco_etiqueta'] ?? 'Representante' }}: {{ $rep['nombre'] }}
+                </p>
               @endforeach
             </div>
 
