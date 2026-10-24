@@ -117,7 +117,7 @@
                     <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" data-confirm="¿Restablecer el estado de esta presentación?">
                       @csrf
                       <input type="hidden" name="accion" value="restablecer">
-                      <x-ui.button type="submit" size="sm" variant="ghost" icon="arrow-counterclockwise">Restablecer</x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="ghost" icon="arrow-counterclockwise" title="Restablecer" aria-label="Restablecer" />
                     </form>
                   @endif
                   <x-ui.ver :target="'detalle-presentacion-'.$registro->id" />
