@@ -33,12 +33,20 @@
                       return null;
                   }
 
-                  $partes = preg_split('/\s+/u', $nombre) ?: [];
-                  $corto = trim(implode(' ', array_slice($partes, 0, 2)));
+                  $partes = array_values(array_filter(preg_split('/\s+/u', $nombre) ?: []));
+                  $cantidad = count($partes);
+
+                  if ($cantidad >= 4) {
+                      $corto = $partes[0].' '.$partes[2];
+                  } elseif ($cantidad === 3) {
+                      $corto = $partes[0].' '.$partes[1];
+                  } else {
+                      $corto = implode(' ', $partes);
+                  }
 
                   return [
                       'parentesco' => $rep['parentesco_etiqueta'] ?? 'Representante',
-                      'nombre' => $corto !== '' ? $corto : $nombre,
+                      'nombre' => $corto,
                   ];
               })
               ->filter()
