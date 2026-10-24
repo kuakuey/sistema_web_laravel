@@ -27,7 +27,21 @@
           @php
             $fila = ApiPresentaciones::formatear($registro);
             $representantes = collect($fila['representantes'] ?? [])
-              ->filter(fn (array $rep) => trim((string) ($rep['nombre'] ?? '')) !== '')
+              ->map(function (array $rep) {
+                  $nombre = trim((string) ($rep['nombre'] ?? ''));
+                  if ($nombre === '') {
+                      return null;
+                  }
+
+                  $partes = preg_split('/\s+/u', $nombre) ?: [];
+                  $corto = trim(implode(' ', array_slice($partes, 0, 2)));
+
+                  return [
+                      'parentesco' => $rep['parentesco_etiqueta'] ?? 'Representante',
+                      'nombre' => $corto !== '' ? $corto : $nombre,
+                  ];
+              })
+              ->filter()
               ->values();
           @endphp
           <li
@@ -39,7 +53,7 @@
               <p class="text-base font-semibold leading-snug break-words text-ink">{{ $fila['nombre_presentado'] }}</p>
               @foreach ($representantes as $rep)
                 <p class="mt-1 text-sm break-words text-muted">
-                  {{ $rep['parentesco_etiqueta'] ?? 'Representante' }}: {{ $rep['nombre'] }}
+                  {{ $rep['parentesco'] }}: {{ $rep['nombre'] }}
                 </p>
               @endforeach
             </div>
