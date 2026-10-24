@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::defaultView('pagination.cda');
 
-        View::composer(['layouts.app', 'layouts.guest'], function (): void {
+        View::composer(['layouts.app', 'layouts.guest', 'layouts.standalone'], function (): void {
             if (session()->has('notify')) {
                 return;
             }
@@ -32,21 +32,28 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        View::composer('layouts.app', function ($view): void {
+        View::composer(['layouts.app', 'layouts.standalone'], function ($view): void {
             $usuario = auth()->user();
             $rol = $usuario?->rolNormalizado() ?? '';
 
-            $view->with([
+            $datos = [
                 'usuarioActual' => $usuario,
                 'rolActual' => $rol,
-                'itemsMenu' => $usuario ? Permisos::itemsMenu($rol) : [],
-                'menuEstructura' => $usuario ? Permisos::menuEstructura($rol) : [],
-                'menuAvanzado' => $usuario ? Permisos::menuAvanzado($rol) : [],
-                'menusLaterales' => $usuario ? Permisos::menusLaterales($rol) : [],
-                'etiquetasMenu' => Permisos::etiquetas(),
-                'iconosMenu' => Permisos::iconos(),
                 'etiquetaRol' => Permisos::etiquetasRoles()[$rol] ?? $rol,
-            ]);
+            ];
+
+            if ($view->name() === 'layouts.app') {
+                $datos = array_merge($datos, [
+                    'itemsMenu' => $usuario ? Permisos::itemsMenu($rol) : [],
+                    'menuEstructura' => $usuario ? Permisos::menuEstructura($rol) : [],
+                    'menuAvanzado' => $usuario ? Permisos::menuAvanzado($rol) : [],
+                    'menusLaterales' => $usuario ? Permisos::menusLaterales($rol) : [],
+                    'etiquetasMenu' => Permisos::etiquetas(),
+                    'iconosMenu' => Permisos::iconos(),
+                ]);
+            }
+
+            $view->with($datos);
         });
     }
 }

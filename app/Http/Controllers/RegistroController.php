@@ -56,6 +56,36 @@ class RegistroController extends Controller
         return $this->responder($request, 'presentaciones');
     }
 
+    public function entregarDiploma(Request $request): View|RedirectResponse
+    {
+        $rol = $request->user()->rolNormalizado();
+
+        if (! Permisos::puedeVerItem($rol, 'presentaciones')) {
+            return redirect(Permisos::urlInicio($rol));
+        }
+
+        $errorBd = null;
+        $registros = collect();
+
+        try {
+            $registros = PresentacionNino::query()
+                ->whereIn('estado', ['contactado', 'confirmado'])
+                ->orderBy('nombre_presentado')
+                ->orderByDesc('id')
+                ->limit(300)
+                ->get();
+        } catch (Throwable) {
+            $errorBd = 'No se pudieron cargar los registros. Confirma que MySQL está iniciado y que la base existe.';
+        }
+
+        return view('presentaciones.entregar-diploma', [
+            'tituloPagina' => 'Entregar diploma',
+            'tituloBarra' => 'Entregar diploma',
+            'registros' => $registros,
+            'errorBd' => $errorBd,
+        ]);
+    }
+
     public function guardarInscripcion(Request $request): RedirectResponse
     {
         $rol = $request->user()->rolNormalizado();
@@ -256,6 +286,28 @@ class RegistroController extends Controller
         $accion = (string) $request->input('accion');
         $ajax = $request->expectsJson() || $request->ajax();
 
+        if ($accion === 'entregar_diploma') {
+            try {
+                $resultado = ApiPresentaciones::actualizarEstado((int) $presentacion->id, 'entregar_diploma', $rol);
+            } catch (\InvalidArgumentException $e) {
+                if ($ajax) {
+                    return response()->json(['exito' => false, 'mensaje' => $e->getMessage()], 422);
+                }
+
+                return back()->withErrors($e->getMessage());
+            }
+
+            Actividad::registrar('actualizar_estado_presentacion', 'presentaciones', 'presentacion', $presentacion->id, 'Entregar diploma');
+            $presentacion->refresh();
+            notify()->success()->title($resultado['mensaje'])->send();
+
+            if ($ajax) {
+                return $this->respuestaEstadoPresentacion($ajax, $resultado['mensaje'], $presentacion, true);
+            }
+
+            return back()->with('ok', $resultado['mensaje']);
+        }
+
         if ($accion === 'avanzar') {
             $siguiente = ApiPresentaciones::siguienteEstado((string) $presentacion->estado);
 
@@ -283,6 +335,41 @@ class RegistroController extends Controller
 
             if ($siguiente === 'presentado') {
                 return redirect()->route('presentaciones.registros');
+            }
+
+            return back();
+        }
+
+        if ($accion === 'retroceder') {
+            abort_unless(Permisos::normalizarRol($rol) === Permisos::SUPERADMIN, 403);
+
+            $estadoActual = (string) $presentacion->estado;
+            $anterior = ApiPresentaciones::estadoAnterior($estadoActual);
+
+            if ($anterior === null) {
+                return $this->respuestaEstadoPresentacion($ajax, 'El registro ya está en el primer estado.', $presentacion, false);
+            }
+
+            try {
+                $resultado = ApiPresentaciones::actualizarEstado((int) $presentacion->id, $anterior, $rol);
+            } catch (\InvalidArgumentException $e) {
+                if ($ajax) {
+                    return response()->json(['exito' => false, 'mensaje' => $e->getMessage()], 422);
+                }
+
+                return back()->withErrors($e->getMessage());
+            }
+
+            Actividad::registrar('actualizar_estado_presentacion', 'presentaciones', 'presentacion', $presentacion->id, 'Retroceder a '.$resultado['estado_etiqueta']);
+            $presentacion->refresh();
+            notify()->success()->title($resultado['mensaje'])->send();
+
+            if ($ajax) {
+                return $this->respuestaEstadoPresentacion($ajax, $resultado['mensaje'], $presentacion, $estadoActual === 'presentado');
+            }
+
+            if ($estadoActual === 'presentado') {
+                return redirect()->route('presentaciones.nuevos');
             }
 
             return back();

@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/presentacion-ninos/{presentacion}/estado', [RegistroController::class, 'estadoPresentacion'])->name('presentaciones.estado');
     Route::delete('/presentacion-ninos/{presentacion}', [RegistroController::class, 'eliminarPresentacion'])->name('presentaciones.eliminar');
 
+    Route::get('/entregar-diploma', [RegistroController::class, 'entregarDiploma'])->name('presentaciones.entregar-diploma');
+
     Route::post('/registros', [RegistroController::class, 'guardarInscripcion'])->name('registros.guardar');
     Route::put('/registros/{inscripcion}', [RegistroController::class, 'actualizarInscripcion'])->name('registros.actualizar');
     Route::post('/registros/{inscripcion}/estado', [RegistroController::class, 'estadoInscripcion'])->name('registros.estado');

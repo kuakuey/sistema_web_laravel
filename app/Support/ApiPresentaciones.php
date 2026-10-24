@@ -31,7 +31,7 @@ class ApiPresentaciones
     }
 
     /**
-     * Flujo del panel (sin Entregar Diploma, que solo usa el plugin).
+     * Flujo del panel (sin Entregar Diploma: se marca en la página / plugin del día).
      *
      * @return array<int, string>
      */
@@ -71,6 +71,18 @@ class ApiPresentaciones
         $siguiente = $flujo[self::indiceFlujo($estado) + 1] ?? null;
 
         return is_string($siguiente) ? $siguiente : null;
+    }
+
+    public static function estadoAnterior(string $estado): ?string
+    {
+        if ($estado === 'entregar_diploma') {
+            return 'confirmado';
+        }
+
+        $flujo = self::flujoPanel();
+        $anterior = $flujo[self::indiceFlujo($estado) - 1] ?? null;
+
+        return is_string($anterior) ? $anterior : null;
     }
 
     /**

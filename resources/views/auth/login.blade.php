@@ -6,8 +6,7 @@
     <span class="mx-auto mb-5 grid size-12 place-items-center rounded-xl bg-accent text-accent-ink shadow-sm">
       <x-ui.icon name="grid-1x2-fill" class="text-lg" />
     </span>
-    <h1 class="text-xl font-semibold tracking-tight">Sistema CDA</h1>
-    <p class="mt-1 text-sm text-muted">Ingresa tus credenciales para continuar</p>
+    <!-- <h1 class="text-xl font-semibold tracking-tight">Sistema CDA</h1> -->
   </div>
 
   <x-ui.card class="shadow-[0_8px_30px_-12px_rgb(15_23_42/0.18)]">
@@ -18,17 +17,17 @@
     <form method="POST" action="{{ route('login') }}" class="space-y-5" novalidate data-no-ajax>
       @csrf
 
-      <x-ui.field label="Usuario" name="usuario">
+      <x-ui.field label="Correo electrónico" name="usuario">
         <div class="relative">
           <x-ui.icon name="person" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
-          <input type="text" id="usuario" name="usuario" value="{{ old('usuario') }}" class="input pl-9" placeholder="Tu usuario" autocomplete="username" autofocus required>
+          <input type="text" id="usuario" name="usuario" value="{{ old('usuario') }}" class="input pl-9" placeholder="Correo electrónico" autocomplete="username" autofocus required>
         </div>
       </x-ui.field>
 
       <x-ui.field label="Contraseña" name="clave">
         <div class="relative">
           <x-ui.icon name="lock" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
-          <input type="password" id="clave" name="clave" class="input px-9" placeholder="Tu contraseña" autocomplete="current-password" required>
+          <input type="password" id="clave" name="clave" class="input px-9" placeholder="Contraseña" autocomplete="current-password" required>
           <button type="button" data-password-toggle="clave" class="absolute right-1.5 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-md text-muted transition hover:bg-surface-2 hover:text-ink" aria-label="Mostrar contraseña" aria-pressed="false">
             <x-ui.icon name="eye" />
           </button>

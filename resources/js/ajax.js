@@ -314,5 +314,6 @@ export {
     mostrarMensajeAjax,
     debeOmitirAjax,
     quitarFila,
+    actualizarContadorResultados,
     tokenCsrf,
 };
