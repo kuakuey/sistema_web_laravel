@@ -26,40 +26,49 @@
         @foreach ($registros as $registro)
           @php
             $fila = ApiPresentaciones::formatearPublica($registro);
+            $partesNombre = preg_split('/\s+/u', trim((string) ($fila['nombre_presentado'] ?? ''))) ?: [];
+            $cantidad = count($partesNombre);
+
+            if ($cantidad <= 1) {
+                $nombres = $partesNombre[0] ?? '';
+                $apellidos = '';
+            } elseif ($cantidad === 2) {
+                $nombres = $partesNombre[0];
+                $apellidos = $partesNombre[1];
+            } else {
+                $apellidos = implode(' ', array_slice($partesNombre, -2));
+                $nombres = implode(' ', array_slice($partesNombre, 0, -2));
+            }
+
             $representantes = collect($fila['representantes'] ?? [])
               ->map(function (array $rep) {
                   $parentesco = $rep['parentesco_etiqueta'] ?? 'Representante';
                   $nombre = trim((string) ($rep['nombre'] ?? ''));
-                  $primer = $nombre !== '' ? (preg_split('/\s+/', $nombre)[0] ?? $nombre) : '';
 
-                  return $primer !== '' ? $parentesco.': '.$primer : null;
+                  return $nombre !== '' ? $parentesco.': '.$nombre : null;
               })
               ->filter()
               ->values();
           @endphp
           <li
-            class="flex items-center gap-4 px-5 py-4 transition hover:bg-surface-2/60"
+            class="flex flex-col gap-3 px-5 py-4 transition hover:bg-surface-2/60 sm:flex-row sm:items-center sm:gap-4"
             data-presentacion-item
             data-id="{{ $registro->id }}"
           >
-            <div class="min-w-0 flex-1">
-              <p class="truncate text-base font-semibold text-ink">
-                {{ $fila['nombre_presentado'] }}
-                @if (($fila['edad_etiqueta'] ?? '—') !== '—')
-                  <span class="font-normal text-muted">({{ $fila['edad_etiqueta'] }})</span>
-                @endif
-              </p>
-              @if ($representantes->isNotEmpty())
-                <p class="mt-0.5 truncate text-sm text-muted">
-                  {{ $representantes->implode(' · ') }}
-                </p>
+            <div class="min-w-0 flex-1 break-words">
+              <p class="text-base font-semibold leading-snug text-ink">{{ $nombres }}</p>
+              @if ($apellidos !== '')
+                <p class="text-base font-semibold leading-snug text-ink">{{ $apellidos }}</p>
               @endif
+              @foreach ($representantes as $linea)
+                <p class="mt-1 text-sm text-muted">{{ $linea }}</p>
+              @endforeach
             </div>
 
             <form
               method="POST"
               action="{{ route('presentaciones.estado', $registro) }}"
-              class="m-0 shrink-0"
+              class="m-0 w-full shrink-0 sm:w-auto"
               data-ajax-estado-presentacion
             >
               @csrf
@@ -68,10 +77,11 @@
                 type="submit"
                 variant="success"
                 icon="check2-circle"
+                class="w-full sm:w-auto"
                 title="Entregar diploma"
                 aria-label="Entregar diploma a {{ $fila['nombre_presentado'] }}"
               >
-                <span class="hidden sm:inline">Entregar diploma</span>
+                Entregar diploma
               </x-ui.button>
             </form>
           </li>
