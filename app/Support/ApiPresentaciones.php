@@ -79,6 +79,10 @@ class ApiPresentaciones
             return 'confirmado';
         }
 
+        if ($estado === 'presentado') {
+            return 'entregar_diploma';
+        }
+
         $flujo = self::flujoPanel();
         $anterior = $flujo[self::indiceFlujo($estado) - 1] ?? null;
 
@@ -86,11 +90,35 @@ class ApiPresentaciones
     }
 
     /**
+     * Flujo completo para la barra de porcentaje (Registrado = 0%).
+     *
+     * @return array<int, string>
+     */
+    public static function flujoPorcentaje(): array
+    {
+        return ['recibido', 'contactado', 'confirmado', 'entregar_diploma', 'presentado'];
+    }
+
+    public static function porcentajeEstado(string $estado): int
+    {
+        $flujo = self::flujoPorcentaje();
+        $indice = array_search($estado, $flujo, true);
+
+        if ($indice === false) {
+            return 0;
+        }
+
+        $ultimo = count($flujo) - 1;
+
+        return $ultimo <= 0 ? 0 : (int) round(($indice / $ultimo) * 100);
+    }
+
+    /**
      * @return array<int, string>
      */
     public static function estadosValidos(): array
     {
-        return ['recibido', 'contactado', 'confirmado', 'entregar_diploma', 'presentado'];
+        return self::flujoPorcentaje();
     }
 
     /**

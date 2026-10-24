@@ -7,14 +7,11 @@
     use App\Support\ApiPresentaciones;
     use App\Support\Permisos;
 
-    $pasos = ApiPresentaciones::flujoPanel();
-    $total = count($pasos);
     $estado = (string) ($registro->estado ?? 'recibido');
-    $indice = ApiPresentaciones::indiceFlujo($estado);
     $siguiente = ApiPresentaciones::siguienteEstado($estado);
     $anterior = ApiPresentaciones::estadoAnterior($estado);
     $etiqueta = ApiPresentaciones::etiquetaEstado($estado);
-    $porcentaje = (int) round((($indice + 1) / $total) * 100);
+    $porcentaje = ApiPresentaciones::porcentajeEstado($estado);
 
     $colores = match ($estado) {
         'presentado' => ['barra' => 'bg-success', 'texto' => 'text-success'],
