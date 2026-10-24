@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Inscripcion;
 use App\Models\PresentacionNino;
 use App\Support\Actividad;
+use App\Support\ApiPresentaciones;
 use App\Support\Permisos;
 use App\Support\Texto;
 use Illuminate\Contracts\View\View;
@@ -88,7 +89,7 @@ class RegistroController extends Controller
             'direccion' => $tipo === 'conexion' ? Texto::titulo($datos['direccion'] ?? '') : '',
             'estado_bautismo' => 'ingresado',
             'ip_cliente' => $request->ip(),
-            'agente_usuario' => substr((string) $request->userAgent(), 0, 255),
+            'agente_usuario' => 'Sistema Web — '.$request->user()->usuario,
         ]);
 
         Actividad::registrar('crear_inscripcion', $tipo, 'inscripcion', $registro->id, 'Crear inscripción');
@@ -133,7 +134,7 @@ class RegistroController extends Controller
             'fecha_nacimiento' => $datos['fecha_nacimiento'] ?? null,
             'estado' => 'recibido',
             'ip_cliente' => $request->ip(),
-            'agente_usuario' => substr((string) $request->userAgent(), 0, 255),
+            'agente_usuario' => 'Sistema Web — '.$request->user()->usuario,
         ]);
 
         Actividad::registrar('crear_presentacion', 'presentaciones', 'presentacion', $registro->id, 'Crear presentación');
@@ -190,12 +191,7 @@ class RegistroController extends Controller
             'telefono_mama' => ['nullable', 'string', 'max:30'],
             'nombre_presentado' => ['required', 'string', 'max:100'],
             'fecha_nacimiento' => ['nullable', 'date'],
-            'estado' => ['nullable', 'in:recibido,presentado'],
         ]);
-
-        $estadoNuevo = $presentacion->estado === 'presentado'
-            ? 'presentado'
-            : ($datos['estado'] ?? $presentacion->estado);
 
         $presentacion->fill([
             'parentesco_representante_1' => $datos['parentesco_representante_1'],
@@ -206,15 +202,7 @@ class RegistroController extends Controller
             'telefono_mama' => trim((string) ($datos['telefono_mama'] ?? '')),
             'nombre_presentado' => Texto::titulo($datos['nombre_presentado']),
             'fecha_nacimiento' => $datos['fecha_nacimiento'] ?? null,
-            'estado' => $estadoNuevo,
         ]);
-
-        if ($estadoNuevo === 'presentado') {
-            $presentacion->fecha_presentacion = $presentacion->fecha_presentacion ?: now()->toDateString();
-            $presentacion->estado_bloqueado = true;
-        } else {
-            $presentacion->fecha_presentacion = null;
-        }
 
         $presentacion->save();
         Actividad::registrar('actualizar_presentacion', 'presentaciones', 'presentacion', $presentacion->id, 'Editar presentación');
@@ -266,20 +254,41 @@ class RegistroController extends Controller
 
         $accion = (string) $request->input('accion');
 
-        if ($accion === 'presentado') {
-            $presentacion->estado = 'presentado';
-            $presentacion->fecha_presentacion = now()->toDateString();
-        } elseif ($accion === 'restablecer' && Permisos::controlTotal($rol)) {
-            $presentacion->estado = 'recibido';
-            $presentacion->fecha_presentacion = null;
-        } else {
-            abort(403);
+        if ($accion === 'avanzar') {
+            $siguiente = ApiPresentaciones::siguienteEstado((string) $presentacion->estado);
+
+            if ($siguiente === null) {
+                return back()->with('ok', 'El registro ya está presentado.');
+            }
+
+            try {
+                $resultado = ApiPresentaciones::actualizarEstado((int) $presentacion->id, $siguiente, $rol);
+            } catch (\InvalidArgumentException $e) {
+                return back()->withErrors($e->getMessage());
+            }
+
+            Actividad::registrar('actualizar_estado_presentacion', 'presentaciones', 'presentacion', $presentacion->id, 'Avanzar a '.$resultado['estado_etiqueta']);
+
+            if ($siguiente === 'presentado') {
+                return redirect()->route('presentaciones.registros')->with('ok', $resultado['mensaje']);
+            }
+
+            return back()->with('ok', $resultado['mensaje']);
         }
 
-        $presentacion->save();
-        Actividad::registrar('actualizar_estado_presentacion', 'presentaciones', 'presentacion', $presentacion->id, 'Cambiar estado de presentación');
+        if ($accion === 'restablecer' && Permisos::controlTotal($rol)) {
+            try {
+                ApiPresentaciones::actualizarEstado((int) $presentacion->id, 'recibido', $rol);
+            } catch (\InvalidArgumentException $e) {
+                return back()->withErrors($e->getMessage());
+            }
 
-        return back()->with('ok', 'Registro actualizado correctamente.');
+            Actividad::registrar('actualizar_estado_presentacion', 'presentaciones', 'presentacion', $presentacion->id, 'Restablecer estado');
+
+            return redirect()->route('presentaciones.nuevos')->with('ok', 'Registro restablecido a Registrado.');
+        }
+
+        abort(403);
     }
 
     public function eliminarInscripcion(Request $request, Inscripcion $inscripcion): RedirectResponse

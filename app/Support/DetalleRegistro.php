@@ -143,9 +143,10 @@ class DetalleRegistro
         }
 
         if (str_starts_with($nombre, 'Sistema Web — ')) {
-            $nombre = substr($nombre, strlen('Sistema Web — '));
+            $login = trim(substr($nombre, strlen('Sistema Web — ')));
+            $nombre = self::nombreUsuarioPanel($login);
         } elseif (str_starts_with($nombre, 'WordPress/')) {
-            $nombre = 'Formulario público';
+            $nombre = 'Formulario Publico';
         }
 
         return [
@@ -201,7 +202,7 @@ class DetalleRegistro
             $filas[] = self::whatsapp('Teléfono segundo representante', $registro->telefono_mama, $registro->nombre_madre);
         }
 
-        $filas[] = self::fila('Estado', $registro->estado === 'presentado' ? 'Presentado' : 'Recibido');
+        $filas[] = self::fila('Estado', ApiPresentaciones::etiquetaEstado((string) $registro->estado));
         $filas[] = self::fila('Fecha de presentación', self::fecha($registro->fecha_presentacion));
 
         return array_merge($filas, self::meta($registro));
@@ -503,14 +504,10 @@ class DetalleRegistro
             self::campo('telefono_mama', 'Teléfono segundo representante', 'tel', $registro->telefono_mama, false, 30),
         ];
 
+        $campos[] = self::campoEstatico('Estado', ApiPresentaciones::etiquetaEstado((string) ($registro->estado ?: 'recibido')));
+
         if ($registro->estado === 'presentado') {
-            $campos[] = self::campoEstatico('Estado', 'Presentado');
             $campos[] = self::campoEstatico('Fecha de presentación', self::fecha($registro->fecha_presentacion));
-        } else {
-            $campos[] = self::campo('estado', 'Estado', 'select', $registro->estado ?: 'recibido', true, null, [
-                'recibido' => 'Recibido',
-                'presentado' => 'Presentado',
-            ]);
         }
 
         return array_merge($campos, self::camposMeta($registro));
@@ -769,16 +766,29 @@ class DetalleRegistro
         return $valor;
     }
 
-    private static function edad(mixed $fecha): string
+    public static function edad(mixed $fecha): string
     {
         if ($fecha === null || $fecha === '') {
             return '—';
         }
 
         try {
-            $anios = Carbon::parse($fecha)->age;
+            $nacimiento = Carbon::parse($fecha)->startOfDay();
+            $hoy = Carbon::today();
 
-            return $anios.' '.($anios === 1 ? 'año' : 'años');
+            if ($nacimiento->greaterThan($hoy)) {
+                return '—';
+            }
+
+            $diff = $nacimiento->diff($hoy);
+
+            if ($diff->y === 0) {
+                $meses = ($diff->y * 12) + $diff->m;
+
+                return $meses.' '.($meses === 1 ? 'mes' : 'meses');
+            }
+
+            return $diff->y.' '.($diff->y === 1 ? 'año' : 'años');
         } catch (\Throwable) {
             return '—';
         }
@@ -799,5 +809,16 @@ class DetalleRegistro
         }
 
         return $etiqueta !== '' ? $nombre.' ('.$etiqueta.')' : $nombre;
+    }
+
+    private static function nombreUsuarioPanel(string $login): string
+    {
+        if ($login === '' || $login === 'interno') {
+            return $login !== '' ? $login : '—';
+        }
+
+        $usuario = User::query()->where('usuario', $login)->first();
+
+        return $usuario ? $usuario->nombreVisible() : $login;
     }
 }

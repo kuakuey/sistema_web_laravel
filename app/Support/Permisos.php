@@ -671,7 +671,7 @@ class Permisos
 
         $textos = match ($seccion) {
             'presentaciones' => [
-                'nuevos' => 'Niños recibidos, pendientes de presentar.',
+                'nuevos' => 'Niños en proceso: registrado, contactado o confirmado.',
                 'registros' => 'Niños ya presentados.',
             ],
             'bautismo' => [

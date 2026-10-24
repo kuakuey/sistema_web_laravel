@@ -55,7 +55,7 @@ class Informes
     public static function etiquetasPresentacion(): array
     {
         return [
-            'recibido' => 'Recibido',
+            'recibido' => 'Registrado',
             'contactado' => 'Contactado',
             'confirmado' => 'Confirmado',
             'entregar_diploma' => 'Entregar Diploma',

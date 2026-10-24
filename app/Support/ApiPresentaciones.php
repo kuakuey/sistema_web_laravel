@@ -22,12 +22,55 @@ class ApiPresentaciones
     public static function etiquetaEstado(string $estado): string
     {
         return [
-            'recibido' => 'Recibido',
+            'recibido' => 'Registrado',
             'contactado' => 'Contactado',
             'confirmado' => 'Confirmado',
             'entregar_diploma' => 'Entregar Diploma',
             'presentado' => 'Presentado',
         ][$estado] ?? $estado;
+    }
+
+    /**
+     * Flujo del panel (sin Entregar Diploma, que solo usa el plugin).
+     *
+     * @return array<int, string>
+     */
+    public static function flujoPanel(): array
+    {
+        return ['recibido', 'contactado', 'confirmado', 'presentado'];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function etiquetasFlujoPanel(): array
+    {
+        $etiquetas = [];
+
+        foreach (self::flujoPanel() as $estado) {
+            $etiquetas[$estado] = self::etiquetaEstado($estado);
+        }
+
+        return $etiquetas;
+    }
+
+    public static function indiceFlujo(string $estado): int
+    {
+        if ($estado === 'entregar_diploma') {
+            return 2;
+        }
+
+        $indice = array_search($estado, self::flujoPanel(), true);
+
+        return $indice === false ? 0 : (int) $indice;
+    }
+
+    public static function siguienteEstado(string $estado): ?string
+    {
+        $flujo = self::flujoPanel();
+        $siguiente = $flujo[self::indiceFlujo($estado) + 1] ?? null;
+
+        return is_string($siguiente) ? $siguiente : null;
     }
 
     /**

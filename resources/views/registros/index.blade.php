@@ -66,7 +66,7 @@
           @if ($seccion === 'generales')
             <th>Sección</th><th>Nombre</th><th>Contacto</th><th>Hora</th><th class="text-right">Acciones</th>
           @elseif ($esPresentaciones)
-            <th>Niño</th><th>Contactos</th><th>Estado</th><th>Registrado</th><th class="text-right">Acciones</th>
+            <th>Niño</th><th>Contactos</th><th>Progreso</th><th>Fecha</th><th class="text-right">Acciones</th>
           @else
             <th>Nombre</th><th>Teléfono</th>
             @if ($seccion === 'conexion')<th>Zona</th><th>Estado</th>@endif
@@ -96,23 +96,24 @@
             </tr>
           @elseif ($esPresentaciones)
             <tr>
-              <td class="font-medium">{{ $registro->nombre_presentado }}</td>
+              <td>
+                <p class="font-medium">{{ $registro->nombre_presentado }}</p>
+                @php $edadNino = \App\Support\DetalleRegistro::edad($registro->fecha_nacimiento); @endphp
+                @if ($edadNino !== '—')
+                  <p class="mt-0.5 text-xs text-muted">{{ $edadNino }}</p>
+                @endif
+              </td>
               <td class="celda-wrap">{!! \App\Support\DetalleRegistro::contactosPresentacion($registro) !!}</td>
               <td>
-                <x-ui.badge :tone="$registro->estado === 'presentado' ? 'success' : 'neutral'">
-                  {{ $registro->estado === 'presentado' ? 'Presentado' : 'Recibido' }}
-                </x-ui.badge>
+                <x-ui.progreso-presentacion
+                  :registro="$registro"
+                  :editable="$registro->estado !== 'presentado'"
+                />
               </td>
               <td class="text-muted tabular-nums">{{ optional($registro->creado_en)->format('d/m/Y') }}</td>
               <td>
                 <div class="flex items-center justify-end gap-1">
-                  @if ($registro->estado !== 'presentado')
-                    <form method="POST" action="{{ route('presentaciones.estado', $registro) }}">
-                      @csrf
-                      <input type="hidden" name="accion" value="presentado">
-                      <x-ui.button type="submit" size="sm" variant="success" icon="check2">Presentado</x-ui.button>
-                    </form>
-                  @elseif ($puedeEditar)
+                  @if ($registro->estado === 'presentado' && $puedeEditar)
                     <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" data-confirm="¿Restablecer el estado de esta presentación?">
                       @csrf
                       <input type="hidden" name="accion" value="restablecer">
