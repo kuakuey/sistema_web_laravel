@@ -20,19 +20,19 @@
       <x-ui.badge tone="accent">{{ $registros->total() }} registro(s)</x-ui.badge>
     @endif
     @if ($puedeAgregar && ! $errorBd && $pestaña === 'lideres')
-      <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevoMiembro">Nuevo miembro</x-ui.button>
+      <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevoMiembro">Nuevo miembro</x-ui.button>
     @endif
     @if ($puedeAgregar && ! $errorBd && $pestaña === 'territorios')
-      <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevoTerritorio">Nuevo ministerio</x-ui.button>
+      <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevoTerritorio">Nuevo ministerio</x-ui.button>
     @endif
     @if ($puedeCrearCasa && ! $errorBd && $pestaña === 'casas')
-      <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevaCasa">Nueva casa</x-ui.button>
+      <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevaCasa">Nueva casa</x-ui.button>
     @endif
     @if ($puedeAgregar && ! $errorBd && $pestaña === 'piramide')
       <x-ui.button
         type="button"
         variant="secondary"
-        icon="bi-pencil"
+        icon="pencil"
         data-piramide-toggle
         :aria-pressed="$abrirPiramide ? 'true' : 'false'"
         title="Activar o desactivar edición"
@@ -96,7 +96,7 @@
     </form>
     <x-slot:footer>
       <x-ui.button type="button" variant="secondary" data-modal-close>Cancelar</x-ui.button>
-      <x-ui.button type="submit" form="formNuevoMiembro" icon="bi-check-lg">Crear miembro</x-ui.button>
+      <x-ui.button type="submit" form="formNuevoMiembro" icon="check-lg">Crear miembro</x-ui.button>
     </x-slot:footer>
   </x-ui.modal>
 @endif
@@ -145,7 +145,7 @@
     </form>
     <x-slot:footer>
       <x-ui.button type="button" variant="secondary" data-modal-close>Cancelar</x-ui.button>
-      <x-ui.button type="submit" form="formNuevoTerritorio" icon="bi-check-lg">Crear ministerio</x-ui.button>
+      <x-ui.button type="submit" form="formNuevoTerritorio" icon="check-lg">Crear ministerio</x-ui.button>
     </x-slot:footer>
   </x-ui.modal>
 @endif
@@ -205,7 +205,7 @@
     </form>
     <x-slot:footer>
       <x-ui.button type="button" variant="secondary" data-modal-close>Cancelar</x-ui.button>
-      <x-ui.button type="submit" form="formNuevaCasa" icon="bi-check-lg">Crear casa</x-ui.button>
+      <x-ui.button type="submit" form="formNuevaCasa" icon="check-lg">Crear casa</x-ui.button>
     </x-slot:footer>
   </x-ui.modal>
 @endif
@@ -235,7 +235,7 @@
     </form>
     <x-slot:footer>
       <x-ui.button type="button" variant="secondary" data-modal-close>Cancelar</x-ui.button>
-      <x-ui.button type="submit" form="formPiramideNodo" icon="bi-check-lg">Guardar equipo</x-ui.button>
+      <x-ui.button type="submit" form="formPiramideNodo" icon="check-lg">Guardar equipo</x-ui.button>
     </x-slot:footer>
   </x-ui.modal>
 @endif

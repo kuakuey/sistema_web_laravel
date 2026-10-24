@@ -15,7 +15,7 @@
 <div class="space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-sm font-medium">Tipos de entrada <span class="text-danger">*</span></p>
-    <x-ui.button type="button" size="sm" variant="secondary" icon="bi-plus-lg" data-agregar-tipo>Agregar tipo</x-ui.button>
+    <x-ui.button type="button" size="sm" variant="secondary" icon="plus-lg" data-agregar-tipo>Agregar tipo</x-ui.button>
   </div>
   <div class="overflow-x-auto rounded-lg border border-line">
     <table class="data-table">
@@ -51,7 +51,7 @@
 <div class="space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-sm font-medium">Información adicional</p>
-    <x-ui.button type="button" size="sm" variant="secondary" icon="bi-plus-lg" data-agregar-campo>Agregar dato</x-ui.button>
+    <x-ui.button type="button" size="sm" variant="secondary" icon="plus-lg" data-agregar-campo>Agregar dato</x-ui.button>
   </div>
   <p class="text-xs text-muted">Datos que se pedirán al registrar. Déjalo vacío si no aplica.</p>
   <div class="space-y-3" data-lista-campos>

@@ -1,8 +1,8 @@
-@props(['icon' => 'bi-inbox', 'title' => 'Sin resultados', 'text' => null])
+@props(['icon' => 'inbox', 'title' => 'Sin resultados', 'text' => null])
 
 <div class="flex flex-col items-center justify-center px-6 py-16 text-center">
     <span class="mb-4 grid size-12 place-items-center rounded-full bg-surface-2 text-muted">
-        <i class="bi {{ $icon }} text-xl" aria-hidden="true"></i>
+        <x-ui.icon :name="$icon" class="text-xl" />
     </span>
     <p class="text-sm font-medium text-ink">{{ $title }}</p>
     @if ($text)

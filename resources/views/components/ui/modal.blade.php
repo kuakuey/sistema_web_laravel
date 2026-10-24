@@ -29,7 +29,7 @@
                 @endif
             </div>
             <button type="button" data-modal-close class="grid size-8 shrink-0 place-items-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-ink" aria-label="Cerrar">
-                <i class="bi bi-x-lg text-sm" aria-hidden="true"></i>
+                <x-ui.icon name="x" class="text-sm" />
             </button>
         </div>
         <div class="min-h-0 flex-1 overflow-y-auto px-6 py-5 text-left">

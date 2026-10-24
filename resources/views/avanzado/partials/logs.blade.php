@@ -11,13 +11,13 @@
       @foreach ($filtrosLog as $clave => $valor)
         <input type="hidden" name="{{ $clave }}" value="{{ $valor }}">
       @endforeach
-      <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Limpiar filtrados</x-ui.button>
+      <x-ui.button type="submit" variant="secondary" icon="funnel">Limpiar filtrados</x-ui.button>
     </form>
   @endif
   <form method="POST" action="{{ route('avanzado.logs.limpiar') }}" data-confirm="¿Eliminar TODO el log de actividad? Esta acción no se puede deshacer.">
     @csrf
     <input type="hidden" name="modo" value="todo">
-    <x-ui.button type="submit" variant="danger" icon="bi-trash" :disabled="! $puedeLimpiarTodo">Limpiar todo</x-ui.button>
+    <x-ui.button type="submit" variant="danger" icon="trash" :disabled="! $puedeLimpiarTodo">Limpiar todo</x-ui.button>
   </form>
 </div>
 
@@ -38,13 +38,13 @@
   </select>
   <input class="input" type="date" name="fecha_desde" value="{{ $filtrosLog['fecha_desde'] }}" aria-label="Desde">
   <input class="input" type="date" name="fecha_hasta" value="{{ $filtrosLog['fecha_hasta'] }}" aria-label="Hasta">
-  <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Filtrar</x-ui.button>
+  <x-ui.button type="submit" variant="secondary" icon="funnel">Filtrar</x-ui.button>
 </form>
 </x-ui.filters>
 
 <x-ui.card flush>
   @if (! $logs || $logs->count() === 0)
-    <x-ui.empty icon="bi-journal-text" title="Sin actividad" text="No hay registros con estos filtros." />
+    <x-ui.empty icon="journal-text" title="Sin actividad" text="No hay registros con estos filtros." />
   @else
     <x-ui.table>
       <x-slot:head>

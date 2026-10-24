@@ -90,8 +90,8 @@
         <x-ui.button type="button" variant="secondary" data-modal-close :hidden="$reabrir">Cerrar</x-ui.button>
         @if ($editable)
             <x-ui.button type="button" variant="secondary" data-detalle-cancelar :hidden="! $reabrir">Cancelar</x-ui.button>
-            <x-ui.button type="button" icon="bi-pencil" data-detalle-editar :hidden="$reabrir">Editar</x-ui.button>
-            <x-ui.button type="submit" form="form-{{ $id }}" icon="bi-check2" data-detalle-guardar :hidden="! $reabrir">Guardar</x-ui.button>
+            <x-ui.button type="button" icon="pencil" data-detalle-editar :hidden="$reabrir">Editar</x-ui.button>
+            <x-ui.button type="submit" form="form-{{ $id }}" icon="check2" data-detalle-guardar :hidden="! $reabrir">Guardar</x-ui.button>
         @endif
     </x-slot:footer>
 </x-ui.modal>

@@ -1,7 +1,7 @@
 <x-ui.card flush>
   @if ($usuarios->isEmpty())
-    <x-ui.empty icon="bi-people" title="Sin usuarios" text="Crea el primer acceso al panel.">
-      <x-ui.button type="button" icon="bi-person-plus" data-modal-open="dialogNuevoUsuario">Nuevo usuario</x-ui.button>
+    <x-ui.empty icon="people" title="Sin usuarios" text="Crea el primer acceso al panel.">
+      <x-ui.button type="button" icon="person-plus" data-modal-open="dialogNuevoUsuario">Nuevo usuario</x-ui.button>
     </x-ui.empty>
   @else
     <x-ui.table>
@@ -26,7 +26,7 @@
                 type="button"
                 size="sm"
                 variant="ghost"
-                icon="bi-key"
+                icon="key"
                 aria-label="Cambiar contraseña"
                 data-modal-open="dialogCambiarClave"
                 data-usuario-id="{{ $usuario->id }}"
@@ -35,7 +35,7 @@
               @if ($usuario->id !== auth()->id())
                 <form method="POST" action="{{ route('avanzado.usuarios.eliminar', $usuario) }}" data-confirm="¿Eliminar el usuario {{ $usuario->usuario }}?">
                   @csrf @method('DELETE')
-                  <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Eliminar"></x-ui.button>
+                  <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                 </form>
               @endif
             </div>
@@ -69,7 +69,7 @@
   </form>
   <x-slot:footer>
     <x-ui.button type="button" variant="secondary" data-modal-close>Cancelar</x-ui.button>
-    <x-ui.button type="submit" form="formNuevoUsuario" icon="bi-person-plus">Crear usuario</x-ui.button>
+    <x-ui.button type="submit" form="formNuevoUsuario" icon="person-plus">Crear usuario</x-ui.button>
   </x-slot:footer>
 </x-ui.modal>
 
@@ -88,6 +88,6 @@
   </form>
   <x-slot:footer>
     <x-ui.button type="button" variant="secondary" data-modal-close>Cancelar</x-ui.button>
-    <x-ui.button type="submit" form="formCambiarClave" icon="bi-key">Guardar contraseña</x-ui.button>
+    <x-ui.button type="submit" form="formCambiarClave" icon="key">Guardar contraseña</x-ui.button>
   </x-slot:footer>
 </x-ui.modal>

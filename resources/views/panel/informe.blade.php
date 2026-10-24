@@ -100,11 +100,11 @@
 
     <div class="flex flex-wrap items-center gap-2 sm:col-span-2 xl:col-span-4">
       <div class="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
-        <x-ui.button type="submit" icon="bi-file-earmark-pdf" class="w-full justify-center !px-2 !text-xs sm:w-auto sm:!px-4 sm:!text-sm">PDF</x-ui.button>
-        <x-ui.button type="submit" variant="secondary" icon="bi-file-earmark-excel" class="w-full justify-center !px-2 !text-xs sm:w-auto sm:!px-4 sm:!text-sm" formaction="{{ route('informes.excel') }}">Excel</x-ui.button>
+        <x-ui.button type="submit" icon="file-earmark-pdf" class="w-full justify-center !px-2 !text-xs sm:w-auto sm:!px-4 sm:!text-sm">PDF</x-ui.button>
+        <x-ui.button type="submit" variant="secondary" icon="file-earmark-excel" class="w-full justify-center !px-2 !text-xs sm:w-auto sm:!px-4 sm:!text-sm" formaction="{{ route('informes.excel') }}">Excel</x-ui.button>
       </div>
       <span id="limpiarFiltros" @unless ($hayFiltros) hidden @endunless>
-        <x-ui.button href="{{ route('informes') }}" variant="secondary" icon="bi-x-circle">Limpiar filtros</x-ui.button>
+        <x-ui.button href="{{ route('informes') }}" variant="secondary" icon="x-circle">Limpiar filtros</x-ui.button>
       </span>
     </div>
   </form>

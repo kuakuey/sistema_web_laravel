@@ -3,10 +3,10 @@
 
   @if ($piramide->isEmpty())
     <x-ui.card>
-      <x-ui.empty icon="bi-diagram-3" title="Aún no hay equipos" text="Activa «Agregar equipo» para crear el primero y marcar a sus miembros.">
+      <x-ui.empty icon="diagram-3" title="Aún no hay equipos" text="Activa «Agregar equipo» para crear el primero y marcar a sus miembros.">
         @if ($puedeAgregar && $miembrosAsignacion->isNotEmpty())
           <div data-piramide-acciones @if (! $abrirPiramide) hidden @endif>
-            <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogPiramideNodo" data-piramide-padre="" data-piramide-nombre="">Nuevo equipo</x-ui.button>
+            <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogPiramideNodo" data-piramide-padre="" data-piramide-nombre="">Nuevo equipo</x-ui.button>
           </div>
         @elseif ($puedeAgregar)
           <x-ui.button href="{{ route('estructura.miembros') }}" variant="secondary">Ir a miembros</x-ui.button>
@@ -36,8 +36,8 @@
     </div>
 
     <div class="fixed bottom-6 right-6 z-20 flex flex-col gap-2">
-      <x-ui.button type="button" variant="secondary" icon="bi-zoom-in" data-piramide-zoom="in" title="Acercar" aria-label="Acercar" />
-      <x-ui.button type="button" variant="secondary" icon="bi-zoom-out" data-piramide-zoom="out" title="Alejar" aria-label="Alejar" />
+      <x-ui.button type="button" variant="secondary" icon="zoom-in" data-piramide-zoom="in" title="Acercar" aria-label="Acercar" />
+      <x-ui.button type="button" variant="secondary" icon="zoom-out" data-piramide-zoom="out" title="Alejar" aria-label="Alejar" />
     </div>
   @endif
 </div>

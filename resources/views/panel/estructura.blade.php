@@ -12,10 +12,10 @@
     <ul class="max-h-[28rem] divide-y divide-line overflow-y-auto">
       @forelse ($territorios as $territorio)
         <li class="flex items-center gap-3 px-5 py-3 text-sm">
-          <i class="bi bi-geo-alt text-muted" aria-hidden="true"></i>{{ $territorio->nombre }}
+          <x-ui.icon name="geo-alt" class="text-muted" />{{ $territorio->nombre }}
         </li>
       @empty
-        <li><x-ui.empty icon="bi-geo-alt" title="Sin territorios" /></li>
+        <li><x-ui.empty icon="geo-alt" title="Sin territorios" /></li>
       @endforelse
     </ul>
   </x-ui.card>
@@ -28,7 +28,7 @@
           {{ $miembro->nombre }} {{ $miembro->apellido }}
         </li>
       @empty
-        <li><x-ui.empty icon="bi-people" title="Sin miembros" /></li>
+        <li><x-ui.empty icon="people" title="Sin miembros" /></li>
       @endforelse
     </ul>
   </x-ui.card>
@@ -41,14 +41,14 @@
           <p class="mt-0.5 text-xs text-muted">{{ $casa->direccion }}</p>
         </li>
       @empty
-        <li><x-ui.empty icon="bi-house" title="Sin casas de vida" /></li>
+        <li><x-ui.empty icon="house" title="Sin casas de vida" /></li>
       @endforelse
     </ul>
   </x-ui.card>
 </div>
 
 <p class="mt-6 flex items-start gap-2 text-xs text-muted">
-  <i class="bi bi-info-circle mt-0.5" aria-hidden="true"></i>
+  <x-ui.icon name="info-circle" class="mt-0.5" />
   La importación y la edición completa de la estructura siguen en el sistema PHP. Esta pantalla lee las mismas tablas.
 </p>
 @endsection

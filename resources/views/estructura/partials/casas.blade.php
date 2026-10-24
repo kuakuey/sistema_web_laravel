@@ -1,10 +1,10 @@
 <x-ui.filters>
 <form method="GET" class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
   <div class="relative">
-    <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true"></i>
+    <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
     <input class="input pl-9" type="search" name="buscar" value="{{ $buscar }}" placeholder="Casa, ministerio, líder o dirección" aria-label="Buscar casas de vida">
   </div>
-  <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Buscar</x-ui.button>
+  <x-ui.button type="submit" variant="secondary" icon="funnel">Buscar</x-ui.button>
 </form>
 </x-ui.filters>
 
@@ -23,9 +23,9 @@
 
 <x-ui.card flush>
   @if ($registros->count() === 0)
-    <x-ui.empty icon="bi-house-heart" title="{{ $buscar !== '' ? 'No se encontraron casas de vida' : 'No hay casas de vida registradas' }}" text="{{ $buscar !== '' ? 'Prueba con otro nombre, ministerio o líder.' : 'Crea una casa cuando ya existan miembros y ministerios de la categoría Territorio.' }}">
+    <x-ui.empty icon="house-heart" title="{{ $buscar !== '' ? 'No se encontraron casas de vida' : 'No hay casas de vida registradas' }}" text="{{ $buscar !== '' ? 'Prueba con otro nombre, ministerio o líder.' : 'Crea una casa cuando ya existan miembros y ministerios de la categoría Territorio.' }}">
       @if ($puedeAgregar && $buscar === '' && $territorios->isNotEmpty() && $miembros->isNotEmpty())
-        <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevaCasa">Nueva casa</x-ui.button>
+        <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevaCasa">Nueva casa</x-ui.button>
       @endif
     </x-ui.empty>
   @else
@@ -53,7 +53,7 @@
               @if ($puedeEditar)
                 <form method="POST" action="{{ route('estructura.casas.eliminar', $registro) }}" data-confirm="¿Eliminar esta casa de vida? Esta acción no se puede deshacer.">
                   @csrf @method('DELETE')
-                  <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Eliminar"></x-ui.button>
+                  <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                 </form>
               @endif
             </div>

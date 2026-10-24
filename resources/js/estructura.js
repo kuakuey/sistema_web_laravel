@@ -102,7 +102,7 @@ function iniciarAsignador(raiz) {
             quitarChip.type = 'button';
             quitarChip.className = 'grid size-4 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink';
             quitarChip.setAttribute('aria-label', 'Quitar');
-            quitarChip.innerHTML = '<i class="bi bi-x-lg text-[0.6rem]" aria-hidden="true"></i>';
+            quitarChip.innerHTML = window.cdaIcon('x', 'text-[0.6rem]');
             quitarChip.addEventListener('click', () => {
                 quitar(rol, id);
                 render();
@@ -287,7 +287,7 @@ function iniciarMarcador(raiz) {
             quitarChip.type = 'button';
             quitarChip.className = 'grid size-4 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink';
             quitarChip.setAttribute('aria-label', 'Quitar');
-            quitarChip.innerHTML = '<i class="bi bi-x-lg text-[0.6rem]" aria-hidden="true"></i>';
+            quitarChip.innerHTML = window.cdaIcon('x', 'text-[0.6rem]');
             quitarChip.addEventListener('click', () => toggle(id));
             chip.appendChild(quitarChip);
             chips.appendChild(chip);

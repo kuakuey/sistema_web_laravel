@@ -19,7 +19,7 @@
       <x-ui.badge tone="accent">{{ $registros->total() }} resultado(s)</x-ui.badge>
     @endif
     @if ($puedeRegistrar && ! $errorBd)
-      <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevo">
+      <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevo">
         {{ $esPresentaciones ? 'Nueva presentación' : 'Nuevo registro' }}
       </x-ui.button>
     @endif
@@ -41,21 +41,21 @@
     <x-ui.filters>
     <form method="GET" class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]">
       <div class="relative">
-        <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true"></i>
+        <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
         <input class="input pl-9" type="search" name="buscar" value="{{ $buscar }}" placeholder="Buscar por nombre, teléfono o correo" aria-label="Buscar">
       </div>
       <input class="input" type="date" name="fecha_desde" value="{{ request('fecha_desde') }}" aria-label="Desde">
       <input class="input" type="date" name="fecha_hasta" value="{{ request('fecha_hasta') }}" aria-label="Hasta">
-      <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Filtrar</x-ui.button>
+      <x-ui.button type="submit" variant="secondary" icon="funnel">Filtrar</x-ui.button>
     </form>
     </x-ui.filters>
   @endif
 
   <x-ui.card flush>
     @if ($registros->count() === 0)
-      <x-ui.empty icon="bi-inbox" title="No hay registros para mostrar" text="Prueba con otros filtros o crea un registro nuevo.">
+      <x-ui.empty icon="inbox" title="No hay registros para mostrar" text="Prueba con otros filtros o crea un registro nuevo.">
         @if ($puedeRegistrar)
-          <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevo">
+          <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevo">
             {{ $esPresentaciones ? 'Nueva presentación' : 'Nuevo registro' }}
           </x-ui.button>
         @endif
@@ -110,20 +110,20 @@
                     <form method="POST" action="{{ route('presentaciones.estado', $registro) }}">
                       @csrf
                       <input type="hidden" name="accion" value="presentado">
-                      <x-ui.button type="submit" size="sm" variant="success" icon="bi-check2">Presentado</x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="success" icon="check2">Presentado</x-ui.button>
                     </form>
                   @elseif ($puedeEditar)
                     <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" data-confirm="¿Restablecer el estado de esta presentación?">
                       @csrf
                       <input type="hidden" name="accion" value="restablecer">
-                      <x-ui.button type="submit" size="sm" variant="ghost" icon="bi-arrow-counterclockwise">Restablecer</x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="ghost" icon="arrow-counterclockwise">Restablecer</x-ui.button>
                     </form>
                   @endif
                   <x-ui.ver :target="'detalle-presentacion-'.$registro->id" />
                   @if ($puedeEditar)
                     <form method="POST" action="{{ route('presentaciones.eliminar', $registro) }}" data-confirm="¿Eliminar esta presentación? Esta acción no se puede deshacer.">
                       @csrf @method('DELETE')
-                      <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Eliminar"></x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                     </form>
                   @endif
                 </div>
@@ -160,28 +160,28 @@
                     <form method="POST" action="{{ route('registros.estado', $registro) }}">
                       @csrf
                       <input type="hidden" name="accion" value="contactado">
-                      <x-ui.button type="submit" size="sm" variant="success" icon="bi-check2">Contactado</x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="success" icon="check2">Contactado</x-ui.button>
                     </form>
                   @endif
                   @if ($seccion === 'bautismo' && $registro->estado_bautismo !== 'bautizado')
                     <form method="POST" action="{{ route('registros.estado', $registro) }}">
                       @csrf
                       <input type="hidden" name="accion" value="bautizado">
-                      <x-ui.button type="submit" size="sm" variant="success" icon="bi-check2">Bautizado</x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="success" icon="check2">Bautizado</x-ui.button>
                     </form>
                   @endif
                   @if ($puedeEditar && (($seccion === 'bautismo' && $registro->estado_bautismo === 'bautizado') || ($seccion === 'conexion' && $registro->contactado)))
                     <form method="POST" action="{{ route('registros.estado', $registro) }}" data-confirm="¿Restablecer el estado de este registro?">
                       @csrf
                       <input type="hidden" name="accion" value="restablecer">
-                      <x-ui.button type="submit" size="sm" variant="ghost" icon="bi-arrow-counterclockwise">Restablecer</x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="ghost" icon="arrow-counterclockwise">Restablecer</x-ui.button>
                     </form>
                   @endif
                   <x-ui.ver :target="'detalle-inscripcion-'.$registro->id" />
                   @if ($puedeEditar)
                     <form method="POST" action="{{ route('registros.eliminar', $registro) }}" data-confirm="¿Eliminar este registro? Esta acción no se puede deshacer.">
                       @csrf @method('DELETE')
-                      <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Eliminar"></x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                     </form>
                   @endif
                 </div>
@@ -311,7 +311,7 @@
       @endif
       <x-slot:footer>
         <x-ui.button type="button" variant="secondary" data-modal-close>Cancelar</x-ui.button>
-        <x-ui.button type="submit" form="{{ $esPresentaciones ? 'formNuevoPresentacion' : 'formNuevoRegistro' }}" icon="bi-check2">
+        <x-ui.button type="submit" form="{{ $esPresentaciones ? 'formNuevoPresentacion' : 'formNuevoRegistro' }}" icon="check2">
           {{ $esPresentaciones ? 'Guardar presentación' : 'Guardar registro' }}
         </x-ui.button>
       </x-slot:footer>

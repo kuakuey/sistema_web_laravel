@@ -20,7 +20,7 @@
       <x-ui.badge tone="accent">{{ $registros->total() }} resultado(s)</x-ui.badge>
     @endif
     @if ($puedeRegistrar && ! $errorBd)
-      <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevo">{{ $etiquetaNuevo }}</x-ui.button>
+      <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevo">{{ $etiquetaNuevo }}</x-ui.button>
     @endif
   </x-slot:actions>
 </x-ui.page-header>
@@ -41,22 +41,22 @@
   <x-ui.filters>
   <form method="GET" class="grid gap-3 {{ $seccion === 'valores_adicionales' ? 'sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]' : 'sm:grid-cols-[minmax(0,1fr)_auto]' }}">
     <div class="relative">
-      <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true"></i>
+      <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
       <input class="input pl-9" type="search" name="buscar" value="{{ $buscar }}" placeholder="Buscar" aria-label="Buscar">
     </div>
     @if ($seccion === 'valores_adicionales')
       <input class="input" type="date" name="fecha_desde" value="{{ request('fecha_desde') }}" aria-label="Desde">
       <input class="input" type="date" name="fecha_hasta" value="{{ request('fecha_hasta') }}" aria-label="Hasta">
     @endif
-    <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Filtrar</x-ui.button>
+    <x-ui.button type="submit" variant="secondary" icon="funnel">Filtrar</x-ui.button>
   </form>
   </x-ui.filters>
 
   <x-ui.card flush>
     @if ($registros->count() === 0)
-      <x-ui.empty icon="bi-inbox" title="No hay registros" text="Aún no hay información que coincida con tu búsqueda.">
+      <x-ui.empty icon="inbox" title="No hay registros" text="Aún no hay información que coincida con tu búsqueda.">
         @if ($puedeRegistrar)
-          <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevo">{{ $etiquetaNuevo }}</x-ui.button>
+          <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevo">{{ $etiquetaNuevo }}</x-ui.button>
         @endif
       </x-ui.empty>
     @else
@@ -90,7 +90,7 @@
                   @if ($puedeEditar)
                     <form method="POST" action="{{ route('ofrendas.eliminar', $registro) }}" data-confirm="¿Eliminar esta ofrenda? Esta acción no se puede deshacer.">
                       @csrf @method('DELETE')
-                      <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Eliminar"></x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                     </form>
                   @endif
                 </div>
@@ -113,7 +113,7 @@
                   @if ($puedeEditar)
                     <form method="POST" action="{{ route('consejeria.eliminar', $registro) }}" data-confirm="¿Eliminar esta consejería? Esta acción no se puede deshacer.">
                       @csrf @method('DELETE')
-                      <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Eliminar"></x-ui.button>
+                      <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                     </form>
                   @endif
                 </div>
@@ -205,7 +205,7 @@
 
   @if ($soloLectura)
     <p class="mt-6 flex items-start gap-2 text-xs text-muted">
-      <i class="bi bi-info-circle mt-0.5" aria-hidden="true"></i>
+      <x-ui.icon name="info-circle" class="mt-0.5" />
       El alta, la edición y los informes de este módulo siguen en el sistema PHP mientras se completa su traslado. Los datos son los de la base actual.
     </p>
   @endif
@@ -302,7 +302,7 @@
     <x-slot:footer>
       <x-ui.button type="button" variant="secondary" data-modal-close>Cancelar</x-ui.button>
       @if ($seccion !== 'ofrendas' || ($casasOfrenda ?? collect())->isNotEmpty())
-        <x-ui.button type="submit" form="formNuevoModulo" icon="bi-check2">
+        <x-ui.button type="submit" form="formNuevoModulo" icon="check2">
           {{ $seccion === 'ofrendas' ? 'Guardar ofrenda' : ($seccion === 'consejeria' ? 'Guardar solicitud' : 'Guardar valor') }}
         </x-ui.button>
       @endif

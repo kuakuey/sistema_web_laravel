@@ -11,7 +11,7 @@
   </div>
   <div data-marcar-inputs></div>
   <div class="relative">
-    <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true"></i>
+    <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
     <input type="search" class="input pl-9" data-marcar-buscar placeholder="Buscar miembro por nombre o cédula" autocomplete="off">
   </div>
   <div data-marcar-lista class="max-h-64 overflow-y-auto rounded-lg border border-line"></div>

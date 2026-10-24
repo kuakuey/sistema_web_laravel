@@ -10,7 +10,7 @@
 <div class="relative" data-buscar-uno data-catalogo="{{ $catalogo }}">
   <input type="hidden" name="{{ $name }}" value="{{ $value }}" @required($required)>
   <div class="relative">
-    <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true"></i>
+    <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
     <input
       type="search"
       class="input pl-9"

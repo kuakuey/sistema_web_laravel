@@ -46,7 +46,7 @@
     if (ticket.asistio) {
       var html =
         '<button type="button" class="btn btn-success w-100" disabled>' +
-          '<i class="bi bi-check2-circle me-1"></i>Asistencia marcada' +
+          (typeof window.cdaIcon === 'function' ? window.cdaIcon('check-circle', 'me-1') : '') + 'Asistencia marcada' +
         '</button>';
 
       if (ticket.puede_reversar) {
@@ -54,7 +54,7 @@
           '<button type="button" class="btn btn-outline-warning w-100 mt-2 js-reversar-asistencia" data-id="' +
             escapeHtml(ticket.id) +
           '">' +
-            '<i class="bi bi-arrow-counterclockwise me-1"></i>Reversar asistencia' +
+            (typeof window.cdaIcon === 'function' ? window.cdaIcon('rotate-ccw', 'me-1') : '') + 'Reversar asistencia' +
           '</button>';
       }
 
@@ -65,7 +65,7 @@
       '<button type="button" class="btn btn-primary w-100 js-marcar-asistencia" data-id="' +
         escapeHtml(ticket.id) +
       '">' +
-        '<i class="bi bi-person-check me-1"></i>Marcar asistencia' +
+        (typeof window.cdaIcon === 'function' ? window.cdaIcon('user-check', 'me-1') : '') + 'Marcar asistencia' +
       '</button>'
     );
   }

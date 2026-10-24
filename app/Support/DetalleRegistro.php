@@ -100,7 +100,7 @@ class DetalleRegistro
 
         return self::fila(
             $etiqueta,
-            '<a class="link-whatsapp" href="https://wa.me/'.e($digitos).'" target="_blank" rel="noopener noreferrer">'.$visible.' <i class="bi bi-whatsapp" aria-hidden="true"></i></a>',
+            '<a class="link-whatsapp" href="https://wa.me/'.e($digitos).'" target="_blank" rel="noopener noreferrer">'.$visible.' '.Iconos::svg('whatsapp').'</a>',
             true
         );
     }

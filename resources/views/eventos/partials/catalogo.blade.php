@@ -1,8 +1,8 @@
 <x-ui.card flush>
   @if ($catalogo->isEmpty())
-    <x-ui.empty icon="bi-calendar-event" title="No hay eventos" text="Agrega el primer evento al catálogo.">
+    <x-ui.empty icon="calendar-event" title="No hay eventos" text="Agrega el primer evento al catálogo.">
       @if ($puedeAgregar)
-        <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevoEvento">Agregar evento</x-ui.button>
+        <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevoEvento">Agregar evento</x-ui.button>
       @endif
     </x-ui.empty>
   @else
@@ -37,21 +37,21 @@
           <td>
             <div class="flex items-center justify-end gap-1">
               @if ($puedeVerInforme)
-                <x-ui.button href="{{ route('eventos.informe.pdf', $evento) }}" size="sm" variant="ghost" icon="bi-file-earmark-pdf" aria-label="Descargar PDF"></x-ui.button>
-                <x-ui.button href="{{ route('eventos.informe.excel', $evento) }}" size="sm" variant="ghost" icon="bi-file-earmark-excel" aria-label="Descargar Excel"></x-ui.button>
-                <x-ui.button href="{{ route('eventos.informe', $evento) }}" size="sm" variant="ghost" icon="bi-file-earmark-text" aria-label="Informe"></x-ui.button>
+                <x-ui.button href="{{ route('eventos.informe.pdf', $evento) }}" size="sm" variant="ghost" icon="file-earmark-pdf" aria-label="Descargar PDF"></x-ui.button>
+                <x-ui.button href="{{ route('eventos.informe.excel', $evento) }}" size="sm" variant="ghost" icon="file-earmark-excel" aria-label="Descargar Excel"></x-ui.button>
+                <x-ui.button href="{{ route('eventos.informe', $evento) }}" size="sm" variant="ghost" icon="file-earmark-text" aria-label="Informe"></x-ui.button>
               @endif
               @if ($puedeAgregar)
-                <x-ui.button type="button" size="sm" variant="ghost" icon="bi-pencil" :data-modal-open="'editar-evento-'.$evento->id" aria-label="Editar"></x-ui.button>
+                <x-ui.button type="button" size="sm" variant="ghost" icon="pencil" :data-modal-open="'editar-evento-'.$evento->id" aria-label="Editar"></x-ui.button>
               @endif
               @if ($puedeEditar)
                 <form method="POST" action="{{ route('eventos.vaciar', $evento) }}" data-confirm="¿Eliminar todos los registros de este evento? El evento se conserva.">
                   @csrf @method('DELETE')
-                  <x-ui.button type="submit" size="sm" variant="ghost" icon="bi-eraser" aria-label="Vaciar registros"></x-ui.button>
+                  <x-ui.button type="submit" size="sm" variant="ghost" icon="eraser" aria-label="Vaciar registros"></x-ui.button>
                 </form>
                 <form method="POST" action="{{ route('eventos.eliminar', $evento) }}" data-confirm="¿Eliminar este evento y todos sus registros?">
                   @csrf @method('DELETE')
-                  <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Eliminar"></x-ui.button>
+                  <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                 </form>
               @endif
             </div>
@@ -72,7 +72,7 @@
       </form>
       <x-slot:footer>
         <x-ui.button type="button" variant="secondary" data-modal-close>Cerrar</x-ui.button>
-        <x-ui.button type="submit" icon="bi-check2" :form="'form-editar-evento-'.$evento->id">Guardar</x-ui.button>
+        <x-ui.button type="submit" icon="check2" :form="'form-editar-evento-'.$evento->id">Guardar</x-ui.button>
       </x-slot:footer>
     </x-ui.modal>
   @endforeach

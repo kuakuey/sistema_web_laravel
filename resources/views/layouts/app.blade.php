@@ -21,7 +21,7 @@
   <dialog id="confirmDialog" class="m-auto w-[calc(100%-2rem)] max-w-sm rounded-xl border border-line bg-surface p-0 text-ink shadow-2xl backdrop:bg-ink/40 backdrop:backdrop-blur-sm">
     <div class="p-6">
       <span class="mb-4 grid size-10 place-items-center rounded-full bg-danger-soft text-danger">
-        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        <x-ui.icon name="exclamation-triangle" />
       </span>
       <h2 class="text-base font-semibold">Confirmar acción</h2>
       <p class="mt-1.5 text-sm text-muted" data-confirm-message></p>

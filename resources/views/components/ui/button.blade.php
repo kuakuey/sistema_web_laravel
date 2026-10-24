@@ -21,12 +21,12 @@
 
 @if ($href)
     <a href="{{ $href }}" {{ $attributes->merge(['class' => $clases]) }}>
-        @if ($icon)<i class="bi {{ $icon }}" aria-hidden="true"></i>@endif
+        @if ($icon)<x-ui.icon :name="$icon" class="shrink-0 text-[1.05em]" />@endif
         {{ $slot }}
     </a>
 @else
     <button type="{{ $type }}" {{ $attributes->merge(['class' => $clases]) }}>
-        @if ($icon)<i class="bi {{ $icon }}" aria-hidden="true"></i>@endif
+        @if ($icon)<x-ui.icon :name="$icon" class="shrink-0 text-[1.05em]" />@endif
         {{ $slot }}
     </button>
 @endif

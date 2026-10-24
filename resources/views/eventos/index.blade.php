@@ -20,10 +20,10 @@
       <x-ui.badge tone="accent">{{ $catalogo->count() }} evento(s)</x-ui.badge>
     @endif
     @if ($pestaña === 'registros' && $puedeRegistrar && ! $errorBd)
-      <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevo">Nuevo registro</x-ui.button>
+      <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevo">Nuevo registro</x-ui.button>
     @endif
     @if ($pestaña === 'eventos' && $puedeAgregar && ! $errorBd)
-      <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevoEvento">Agregar evento</x-ui.button>
+      <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevoEvento">Agregar evento</x-ui.button>
     @endif
   </x-slot:actions>
 </x-ui.page-header>
@@ -53,7 +53,7 @@
 @if ($puedeRegistrar && $pestaña === 'registros' && ! $errorBd)
   <x-ui.modal id="dialogNuevo" title="Nuevo registro" description="Detalles de entradas, datos personales y datos adicionales." size="xl" :open="$abrirRegistro">
     @if ($habilitados->isEmpty())
-      <x-ui.empty icon="bi-calendar-x" title="No hay eventos habilitados" text="Primero agrega y habilita un evento en Eventos." />
+      <x-ui.empty icon="calendar-x" title="No hay eventos habilitados" text="Primero agrega y habilita un evento en Eventos." />
       <x-slot:footer>
         <x-ui.button type="button" variant="secondary" data-modal-close>Cerrar</x-ui.button>
       </x-slot:footer>
@@ -61,7 +61,7 @@
       @include('eventos.partials.registrar', ['enPopup' => true])
       <x-slot:footer>
         <x-ui.button type="button" variant="secondary" data-modal-close>Cerrar</x-ui.button>
-        <x-ui.button type="submit" form="formNuevoRegistro" icon="bi-check-lg" data-submit-registro disabled>Registrar</x-ui.button>
+        <x-ui.button type="submit" form="formNuevoRegistro" icon="check-lg" data-submit-registro disabled>Registrar</x-ui.button>
       </x-slot:footer>
     @endif
   </x-ui.modal>
@@ -76,7 +76,7 @@
     </form>
     <x-slot:footer>
       <x-ui.button type="button" variant="secondary" data-modal-close>Cerrar</x-ui.button>
-      <x-ui.button type="submit" form="formNuevoEvento" icon="bi-plus-lg">Agregar evento</x-ui.button>
+      <x-ui.button type="submit" form="formNuevoEvento" icon="plus-lg">Agregar evento</x-ui.button>
     </x-slot:footer>
   </x-ui.modal>
 @endif

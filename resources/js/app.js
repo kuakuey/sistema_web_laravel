@@ -1,4 +1,5 @@
-import './bootstrap';
+import './http';
+import './icons';
 import './eventos';
 import './estructura';
 
@@ -102,7 +103,6 @@ document.querySelectorAll('[data-filters-toggle]').forEach((boton) => {
 /* Mostrar / ocultar contraseña */
 document.querySelectorAll('[data-password-toggle]').forEach((boton) => {
     const campo = document.getElementById(boton.dataset.passwordToggle);
-    const icono = boton.querySelector('i');
 
     if (!campo) {
         return;
@@ -114,10 +114,7 @@ document.querySelectorAll('[data-password-toggle]').forEach((boton) => {
         campo.type = mostrar ? 'text' : 'password';
         boton.setAttribute('aria-pressed', mostrar ? 'true' : 'false');
         boton.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
-
-        if (icono) {
-            icono.className = mostrar ? 'bi bi-eye-slash' : 'bi bi-eye';
-        }
+        boton.innerHTML = window.cdaIcon(mostrar ? 'eye-off' : 'eye');
     });
 });
 
@@ -333,10 +330,10 @@ function bloquearFormulario(formulario) {
         boton.disabled = true;
         boton.setAttribute('aria-busy', 'true');
 
-        const icono = boton.querySelector('i');
+        const icono = boton.querySelector('svg');
 
         if (icono) {
-            icono.className = 'bi bi-hourglass-split';
+            icono.outerHTML = window.cdaIcon('hourglass', icono.getAttribute('class') || 'shrink-0 text-[1.05em]');
         }
     });
 

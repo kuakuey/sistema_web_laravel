@@ -12,7 +12,7 @@
 >
   <div class="sidebar-header flex h-16 shrink-0 items-center gap-3 px-4">
     <a href="{{ \App\Support\Permisos::urlInicio($rolActual) }}" class="sidebar-logo grid size-8 shrink-0 place-items-center rounded-lg bg-accent text-accent-ink" aria-label="Sistema CDA">
-      <i class="bi bi-grid-1x2-fill text-sm" aria-hidden="true"></i>
+      <x-ui.icon name="grid-1x2-fill" class="text-sm" />
     </a>
     <a href="{{ \App\Support\Permisos::urlInicio($rolActual) }}" class="sidebar-label min-w-0 flex-1 truncate text-sm font-semibold tracking-tight text-ink">Sistema CDA</a>
     <button
@@ -22,8 +22,8 @@
       aria-label="Colapsar menú"
       title="Colapsar menú"
     >
-      <i class="bi bi-chevron-left sidebar-collapse-open text-sm" aria-hidden="true"></i>
-      <i class="bi bi-chevron-right sidebar-collapse-closed text-sm" aria-hidden="true"></i>
+      <x-ui.icon name="chevron-left" class="sidebar-collapse-open text-sm" />
+      <x-ui.icon name="chevron-right" class="sidebar-collapse-closed text-sm" />
       <span class="sidebar-tip sidebar-tip-collapse" role="tooltip">Expandir menú</span>
     </button>
   </div>
@@ -50,7 +50,7 @@
           'text-muted hover:bg-surface-2 hover:text-ink' => ! $activo,
         ])
       >
-        <i class="bi {{ $iconosMenu[$claveSeccion] ?? 'bi-file-text' }} w-4 shrink-0 text-center text-[0.95rem]" aria-hidden="true"></i>
+        <x-ui.icon :name="$iconosMenu[$claveSeccion] ?? 'file-text'" class="w-4 shrink-0 text-center text-[0.95rem]" />
         <span class="sidebar-label min-w-0 truncate">{{ $etiqueta }}</span>
         <span class="sidebar-tip" role="tooltip">{{ $etiqueta }}</span>
       </a>
@@ -67,7 +67,7 @@
                 'text-muted hover:bg-surface-2 hover:text-ink' => ! $subactivo,
               ])
             >
-              <i class="bi {{ $item['icono'] }} w-4 text-center text-[0.85rem]" aria-hidden="true"></i>
+              <x-ui.icon :name="$item['icono']" class="w-4 text-center text-[0.85rem]" />
               <span class="min-w-0 truncate">{{ $item['etiqueta'] }}</span>
             </a>
           @endforeach
@@ -86,8 +86,8 @@
         @endif
       </div>
       <button type="button" data-theme-toggle class="relative grid size-8 shrink-0 place-items-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-ink" aria-label="Cambiar tema" title="Cambiar tema">
-        <i class="bi bi-moon-stars dark:hidden" aria-hidden="true"></i>
-        <i class="bi bi-sun hidden dark:inline" aria-hidden="true"></i>
+        <x-ui.icon name="moon-stars" class="dark:hidden" />
+        <x-ui.icon name="sun" class="hidden dark:inline" />
         <span class="sidebar-tip" role="tooltip">Cambiar tema</span>
       </button>
     </div>
@@ -95,7 +95,7 @@
     <form method="POST" action="{{ route('logout') }}" class="mt-1">
       @csrf
       <button type="submit" class="sidebar-link relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted transition hover:bg-danger-soft hover:text-danger">
-        <i class="bi bi-box-arrow-right w-4 shrink-0 text-center" aria-hidden="true"></i>
+        <x-ui.icon name="box-arrow-right" class="w-4 shrink-0 text-center" />
         <span class="sidebar-label">Cerrar sesión</span>
         <span class="sidebar-tip" role="tooltip">Cerrar sesión</span>
       </button>

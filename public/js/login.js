@@ -4,11 +4,9 @@
   var input = document.getElementById('clave');
   var toggle = document.getElementById('toggleClave');
 
-  if (!input || !toggle) {
+  if (!input || !toggle || typeof window.cdaIcon !== 'function') {
     return;
   }
-
-  var icon = toggle.querySelector('i');
 
   toggle.addEventListener('click', function () {
     var mostrar = input.type === 'password';
@@ -17,9 +15,6 @@
     toggle.setAttribute('aria-pressed', mostrar ? 'true' : 'false');
     toggle.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
     toggle.title = mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña';
-
-    if (icon) {
-      icon.className = mostrar ? 'bi bi-eye-slash' : 'bi bi-eye';
-    }
+    toggle.innerHTML = window.cdaIcon(mostrar ? 'eye-off' : 'eye');
   });
 })();

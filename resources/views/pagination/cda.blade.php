@@ -7,9 +7,9 @@
 
         <div class="flex items-center gap-1">
             @if ($paginator->onFirstPage())
-                <span class="grid size-9 place-items-center rounded-lg text-muted/50" aria-disabled="true"><i class="bi bi-chevron-left"></i></span>
+                <span class="grid size-9 place-items-center rounded-lg text-muted/50" aria-disabled="true"><x-ui.icon name="chevron-left" /></span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Anterior" class="grid size-9 place-items-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-ink"><i class="bi bi-chevron-left"></i></a>
+                <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Anterior" class="grid size-9 place-items-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-ink"><x-ui.icon name="chevron-left" /></a>
             @endif
 
             @foreach ($elements as $element)
@@ -29,9 +29,9 @@
             @endforeach
 
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Siguiente" class="grid size-9 place-items-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-ink"><i class="bi bi-chevron-right"></i></a>
+                <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Siguiente" class="grid size-9 place-items-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-ink"><x-ui.icon name="chevron-right" /></a>
             @else
-                <span class="grid size-9 place-items-center rounded-lg text-muted/50" aria-disabled="true"><i class="bi bi-chevron-right"></i></span>
+                <span class="grid size-9 place-items-center rounded-lg text-muted/50" aria-disabled="true"><x-ui.icon name="chevron-right" /></span>
             @endif
         </div>
     </nav>

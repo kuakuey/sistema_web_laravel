@@ -22,9 +22,9 @@
     </div>
     <div class="flex gap-2">
       @if ($puedeVerInforme)
-        <x-ui.button href="{{ route('eventos.informe.pdf', $eventoParticipantes) }}" variant="secondary" icon="bi-file-earmark-pdf">PDF</x-ui.button>
-        <x-ui.button href="{{ route('eventos.informe.excel', $eventoParticipantes) }}" variant="secondary" icon="bi-file-earmark-excel">Excel</x-ui.button>
-        <x-ui.button href="{{ route('eventos.informe', $eventoParticipantes) }}" variant="secondary" icon="bi-file-earmark-text">Informe</x-ui.button>
+        <x-ui.button href="{{ route('eventos.informe.pdf', $eventoParticipantes) }}" variant="secondary" icon="file-earmark-pdf">PDF</x-ui.button>
+        <x-ui.button href="{{ route('eventos.informe.excel', $eventoParticipantes) }}" variant="secondary" icon="file-earmark-excel">Excel</x-ui.button>
+        <x-ui.button href="{{ route('eventos.informe', $eventoParticipantes) }}" variant="secondary" icon="file-earmark-text">Informe</x-ui.button>
       @endif
       <x-ui.button href="{{ route('eventos.catalogo') }}" variant="secondary">Volver</x-ui.button>
     </div>
@@ -36,15 +36,15 @@
   <input class="input" type="search" name="buscar" value="{{ $buscar }}" placeholder="Buscar nombre, teléfono o numeración">
   <input class="input" type="date" name="fecha_desde" value="{{ request('fecha_desde') }}" aria-label="Desde">
   <input class="input" type="date" name="fecha_hasta" value="{{ request('fecha_hasta') }}" aria-label="Hasta">
-  <x-ui.button type="submit" variant="secondary" icon="bi-funnel">Filtrar</x-ui.button>
+  <x-ui.button type="submit" variant="secondary" icon="funnel">Filtrar</x-ui.button>
 </form>
 </x-ui.filters>
 
 <x-ui.card flush>
   @if (! $registros || $registros->count() === 0)
-    <x-ui.empty icon="bi-inbox" title="No hay registros" text="Aún no hay participantes que coincidan con la búsqueda.">
+    <x-ui.empty icon="inbox" title="No hay registros" text="Aún no hay participantes que coincidan con la búsqueda.">
       @if ($puedeRegistrar && $pestaña === 'registros')
-        <x-ui.button type="button" icon="bi-plus-lg" data-modal-open="dialogNuevo">Nuevo registro</x-ui.button>
+        <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevo">Nuevo registro</x-ui.button>
       @endif
     </x-ui.empty>
   @else
@@ -100,7 +100,7 @@
               @if ($puedeEditar)
                 <form method="POST" action="{{ route('eventos.participantes.eliminar', $registro) }}" data-confirm="¿Eliminar este registro?">
                   @csrf @method('DELETE')
-                  <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Eliminar"></x-ui.button>
+                  <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                 </form>
               @endif
             </div>

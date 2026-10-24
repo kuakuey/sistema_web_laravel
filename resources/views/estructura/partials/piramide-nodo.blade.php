@@ -40,7 +40,7 @@
           type="button"
           size="sm"
           variant="ghost"
-          icon="bi-plus-lg"
+          icon="plus-lg"
           data-modal-open="dialogPiramideNodo"
           data-piramide-padre="{{ $nodo->id }}"
           data-piramide-nombre="{{ $nodo->nombre }}"
@@ -53,7 +53,7 @@
           type="button"
           size="sm"
           variant="ghost"
-          icon="bi-pencil"
+          icon="pencil"
           data-modal-open="dialogPiramideNodo"
           data-piramide-id="{{ $nodo->id }}"
           data-piramide-padre="{{ $nodo->padre_id }}"
@@ -64,7 +64,7 @@
         />
         <form method="POST" action="{{ route('estructura.piramide.eliminar', $nodo) }}" data-confirm="¿Quitar el equipo «{{ $nodo->nombre }}»? También se quitan los equipos que dependen de él.">
           @csrf @method('DELETE')
-          <x-ui.button type="submit" size="sm" variant="danger" icon="bi-trash" aria-label="Quitar"></x-ui.button>
+          <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Quitar"></x-ui.button>
         </form>
       @endif
     </div>

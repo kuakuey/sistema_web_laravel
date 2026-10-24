@@ -5,7 +5,7 @@
   );
 @endphp
 @if ($habilitados->isEmpty())
-  <x-ui.empty icon="bi-calendar-x" title="No hay eventos habilitados" text="Un superadmin debe agregar y habilitar eventos primero." />
+  <x-ui.empty icon="calendar-x" title="No hay eventos habilitados" text="Un superadmin debe agregar y habilitar eventos primero." />
 @else
     <script type="application/json" id="configEventosRegistro">@json($configEventos)</script>
     <form id="formNuevoRegistro" method="POST" action="{{ route('eventos.participantes.guardar') }}" class="space-y-8" data-registro-evento data-puede-estado="{{ $puedeEstadoPago ? '1' : '0' }}" data-solo-pago="{{ $soloMetodosPago ? '1' : '0' }}">
@@ -95,7 +95,7 @@
 
       @unless ($enPopup)
         <div>
-          <x-ui.button type="submit" icon="bi-check-lg" data-submit-registro disabled>Registrar</x-ui.button>
+          <x-ui.button type="submit" icon="check-lg" data-submit-registro disabled>Registrar</x-ui.button>
         </div>
       @endunless
     </form>

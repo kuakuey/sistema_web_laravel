@@ -27,7 +27,7 @@
         <div class="mb-3 flex items-start justify-between gap-3">
           <div class="flex items-start gap-3">
             <span class="grid size-9 place-items-center rounded-lg bg-accent-soft text-accent">
-              <i class="bi {{ $iconos[$modulo] ?? 'bi-circle' }}" aria-hidden="true"></i>
+              <x-ui.icon :name="$iconos[$modulo] ?? 'circle'" />
             </span>
             <div>
               <h3 class="text-sm font-semibold">{{ $info['etiqueta'] }}</h3>
@@ -58,6 +58,6 @@
   </div>
 
   <div class="flex justify-end pt-2">
-    <x-ui.button type="submit" icon="bi-check-lg">Guardar permisos de {{ $rolesPermisos[$rolPermisos] ?? $rolPermisos }}</x-ui.button>
+    <x-ui.button type="submit" icon="check-lg">Guardar permisos de {{ $rolesPermisos[$rolPermisos] ?? $rolPermisos }}</x-ui.button>
   </div>
 </form>

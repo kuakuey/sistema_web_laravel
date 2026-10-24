@@ -9,7 +9,7 @@
 
 <x-ui.card class="mx-auto max-w-xl">
   @if ($eventos->isEmpty())
-    <x-ui.empty icon="bi-calendar-x" title="No hay eventos habilitados" text="Habilita un evento para usar el checkout." />
+    <x-ui.empty icon="calendar-x" title="No hay eventos habilitados" text="Habilita un evento para usar el checkout." />
   @else
     <form class="space-y-5" data-checkout data-consultar="{{ route('checkout.consultar') }}" data-marcar="{{ route('checkout.marcar') }}" data-reversar="{{ route('checkout.reversar') }}" data-puede-reversar="{{ $puedeReversar ? '1' : '0' }}">
       @csrf
@@ -24,7 +24,7 @@
       <x-ui.field label="Código / numeración" name="codigo" required>
         <input class="input" name="codigo" required maxlength="30" autocomplete="off" autofocus>
       </x-ui.field>
-      <x-ui.button type="submit" icon="bi-search">Consultar</x-ui.button>
+      <x-ui.button type="submit" icon="search">Consultar</x-ui.button>
     </form>
 
     <p class="mt-4 hidden text-sm text-danger" data-checkout-error></p>

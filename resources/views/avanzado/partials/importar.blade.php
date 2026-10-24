@@ -8,7 +8,7 @@
       <li>Forma de pago: <code>efectivo</code>, <code>transferencia</code> o vacío si queda pendiente.</li>
     </ul>
     <div class="mt-5">
-      <x-ui.button href="{{ route('avanzado.importar.plantilla') }}" variant="secondary" icon="bi-download">Descargar plantilla CSV</x-ui.button>
+      <x-ui.button href="{{ route('avanzado.importar.plantilla') }}" variant="secondary" icon="download">Descargar plantilla CSV</x-ui.button>
     </div>
   </x-ui.card>
 
@@ -19,7 +19,7 @@
       <x-ui.field label="Archivo" name="archivo" required>
         <input class="input pt-2" type="file" id="archivo" name="archivo" accept=".csv,text/csv" required>
       </x-ui.field>
-      <x-ui.button type="submit" icon="bi-cloud-upload">Importar registros</x-ui.button>
+      <x-ui.button type="submit" icon="cloud-upload">Importar registros</x-ui.button>
     </form>
   </x-ui.card>
 </div>

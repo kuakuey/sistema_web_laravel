@@ -13,7 +13,7 @@
   <x-slot:actions>
     @if ($pestaña === 'usuarios')
       <x-ui.badge tone="accent">{{ $usuarios->count() }} usuario(s)</x-ui.badge>
-      <x-ui.button type="button" icon="bi-person-plus" data-modal-open="dialogNuevoUsuario">Nuevo usuario</x-ui.button>
+      <x-ui.button type="button" icon="person-plus" data-modal-open="dialogNuevoUsuario">Nuevo usuario</x-ui.button>
     @elseif ($pestaña === 'bd' && $estadoBd)
       <x-ui.badge :tone="$estadoBd['sistema_listo'] ? 'success' : 'warning'">
         {{ $estadoBd['tablas_instaladas'] }}/{{ $estadoBd['total_tablas'] }} tablas

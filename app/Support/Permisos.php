@@ -67,21 +67,21 @@ class Permisos
     public static function iconos(): array
     {
         return [
-            'generales' => 'bi-grid',
-            'escol' => 'bi-book',
-            'academia' => 'bi-mortarboard',
-            'bautismo' => 'bi-droplet',
-            'conexion' => 'bi-person-plus',
-            'presentaciones' => 'bi-people',
-            'networking' => 'bi-briefcase',
-            'ofrendas' => 'bi-cash-stack',
-            'valores_adicionales' => 'bi-wallet2',
-            'eventos' => 'bi-calendar-event',
-            'calendario' => 'bi-calendar3',
-            'consejeria' => 'bi-chat-heart',
-            'generar_informe' => 'bi-file-earmark-bar-graph',
-            'estructura' => 'bi-diagram-3',
-            'avanzado' => 'bi-sliders',
+            'generales' => 'grid',
+            'escol' => 'book',
+            'academia' => 'mortarboard',
+            'bautismo' => 'droplet',
+            'conexion' => 'person-plus',
+            'presentaciones' => 'people',
+            'networking' => 'briefcase',
+            'ofrendas' => 'cash-stack',
+            'valores_adicionales' => 'wallet2',
+            'eventos' => 'calendar-event',
+            'calendario' => 'calendar3',
+            'consejeria' => 'chat-heart',
+            'generar_informe' => 'file-earmark-bar-graph',
+            'estructura' => 'diagram-3',
+            'avanzado' => 'sliders',
         ];
     }
 
@@ -412,6 +412,12 @@ class Permisos
         return $detalle !== null && self::tieneDetalle($rol, $seccion, $detalle);
     }
 
+    /** Acceso al portal del plugin WordPress (presentaciones u ofrendas). */
+    public static function puedeAccederPortalPlugin(string $rol): bool
+    {
+        return self::tieneSeccion($rol, 'presentaciones') || self::puedeRegistrar($rol, 'ofrendas');
+    }
+
     public static function puedeVerTablaEventos(string $rol): bool
     {
         return self::tieneDetalle($rol, 'eventos', 'tabla');
@@ -476,28 +482,28 @@ class Permisos
                 'clave' => 'lideres',
                 'ruta' => 'estructura.miembros',
                 'etiqueta' => 'Miembros',
-                'icono' => 'bi-people',
+                'icono' => 'people',
                 'texto' => 'Registra y consulta los miembros de la iglesia.',
             ],
             'territorios' => [
                 'clave' => 'territorios',
                 'ruta' => 'estructura.ministerios',
                 'etiqueta' => 'Ministerios',
-                'icono' => 'bi-map',
+                'icono' => 'map',
                 'texto' => 'Categorías y ministerios de la estructura.',
             ],
             'casas' => [
                 'clave' => 'casas',
                 'ruta' => 'estructura.casas',
                 'etiqueta' => 'Casas de vida',
-                'icono' => 'bi-house-heart',
+                'icono' => 'house-heart',
                 'texto' => 'Casas asignadas a un territorio.',
             ],
             'piramide' => [
                 'clave' => 'piramide',
                 'ruta' => 'estructura.piramide',
                 'etiqueta' => 'Pirámide',
-                'icono' => 'bi-diagram-3',
+                'icono' => 'diagram-3',
                 'texto' => 'Equipos y niveles de liderazgo.',
             ],
         ];
@@ -542,35 +548,35 @@ class Permisos
                 'clave' => 'usuarios',
                 'ruta' => 'avanzado.usuarios.ver',
                 'etiqueta' => 'Usuarios',
-                'icono' => 'bi-people',
+                'icono' => 'people',
                 'texto' => 'Crea accesos al panel y cambia contraseñas.',
             ],
             'permisos' => [
                 'clave' => 'permisos',
                 'ruta' => 'avanzado.permisos.ver',
                 'etiqueta' => 'Permisos',
-                'icono' => 'bi-shield-check',
+                'icono' => 'shield-check',
                 'texto' => 'Elige qué puede ver o hacer cada rol.',
             ],
             'bd' => [
                 'clave' => 'bd',
                 'ruta' => 'avanzado.bd',
                 'etiqueta' => 'Base de datos',
-                'icono' => 'bi-database-gear',
+                'icono' => 'database-gear',
                 'texto' => 'Revisa la conexión y las tablas instaladas.',
             ],
             'importar' => [
                 'clave' => 'importar',
                 'ruta' => 'avanzado.importar.ver',
                 'etiqueta' => 'Importar',
-                'icono' => 'bi-file-earmark-arrow-up',
+                'icono' => 'file-earmark-arrow-up',
                 'texto' => 'Carga participantes de eventos desde un CSV.',
             ],
             'logs' => [
                 'clave' => 'logs',
                 'ruta' => 'avanzado.logs',
                 'etiqueta' => 'Actividad',
-                'icono' => 'bi-journal-text',
+                'icono' => 'journal-text',
                 'texto' => 'Consulta el historial de acciones del panel.',
             ],
         ];
@@ -624,14 +630,14 @@ class Permisos
                 'clave' => 'registros',
                 'ruta' => 'eventos.registros',
                 'etiqueta' => 'Registros',
-                'icono' => 'bi-list-ul',
+                'icono' => 'list-ul',
                 'texto' => 'Registra y consulta participantes.',
             ],
             'eventos' => [
                 'clave' => 'eventos',
                 'ruta' => 'eventos.catalogo',
                 'etiqueta' => 'Eventos',
-                'icono' => 'bi-calendar-event',
+                'icono' => 'calendar-event',
                 'texto' => 'Catálogo de eventos y tipos de entrada.',
             ],
         ];
@@ -689,14 +695,14 @@ class Permisos
                 'clave' => 'nuevos',
                 'ruta' => $prefijo.'.nuevos',
                 'etiqueta' => 'Nuevos registros',
-                'icono' => 'bi-inbox',
+                'icono' => 'inbox',
                 'texto' => $textos['nuevos'],
             ],
             [
                 'clave' => 'registros',
                 'ruta' => $prefijo.'.registros',
                 'etiqueta' => 'Registros',
-                'icono' => 'bi-list-ul',
+                'icono' => 'list-ul',
                 'texto' => $textos['registros'],
             ],
         ];
