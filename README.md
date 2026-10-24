@@ -1,59 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema Web CDA (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Reescritura del **Sistema Web** de CDA (PHP puro + Bootstrap) a **Laravel + Tailwind**.
 
-## About Laravel
+Panel interno de la iglesia: interfaz y mensajes en español. Zona horaria: `America/Guayaquil`.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Laravel usa **la misma base MySQL** que el sistema legado. No se recrea el esquema; se mapean tablas existentes con Eloquent (`ModeloCda`, timestamps `creado_en`, etc.).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tecnologías
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Backend
+| Tecnología | Uso |
+|---|---|
+| **PHP** `^8.2` | Runtime del servidor |
+| **Laravel** `^12` | Framework principal (rutas, controladores, middleware, auth) |
+| **Eloquent ORM** | Modelos sobre tablas legadas (`usuarios`, `presentaciones_ninos`, etc.) |
+| **MySQL** | Base de datos compartida con el sistema PHP anterior |
+| **Blade** | Plantillas del panel |
+| **Composer** | Dependencias PHP |
 
-## Learning Laravel
+### Frontend
+| Tecnología | Uso |
+|---|---|
+| **Tailwind CSS** `^4` | Estilos del panel (tema claro/oscuro) |
+| **Vite** `^7` | Empaquetado de CSS/JS (`npm run build` / `npm run dev`) |
+| **Alpine.js** `^3` | Interactividad ligera (notificaciones y UI) |
+| **Axios** | Cliente HTTP (configuración base del proyecto) |
+| **JavaScript (ES modules)** | AJAX global, presentaciones, eventos, estructura |
+| **npm** | Dependencias front |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Librerías y paquetes
+| Paquete | Uso |
+|---|---|
+| **mckenziearts/laravel-notify** | Toasts / notificaciones flash |
+| **mckenziearts/blade-untitledui-icons** | Iconos SVG en Blade (dependencia de Notify) |
+| **blade-ui-kit/blade-icons** | Infraestructura de iconos Blade |
+| **dompdf/dompdf** | Generación de PDF (informes) |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Entorno y herramientas de desarrollo
+| Tecnología | Uso |
+|---|---|
+| **XAMPP** (Apache + MySQL + PHP) | Entorno local típico del proyecto |
+| **Laravel Pint** | Formato de código PHP |
+| **PHPUnit** | Pruebas |
+| **Laravel Pail / Sail / Collision** | Utilidades de desarrollo Laravel |
 
-## Laravel Sponsors
+### Integraciones
+| Tecnología | Uso |
+|---|---|
+| **API REST** (`routes/api.php`) | Formularios públicos / plugin WordPress (`X-API-KEY`) |
+| **Fetch AJAX** | Envío de formularios del panel sin recarga completa |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Requisitos
 
-### Premium Partners
+- PHP 8.2+ (Notify 3.x declara PHP 8.3; en este entorno se instaló con `--ignore-platform-req=php`)
+- Composer
+- Node.js + npm
+- MySQL (misma BD del sistema legado)
+- Extensiones PHP habituales de Laravel (pdo_mysql, mbstring, openssl, etc.)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Instalación rápida
 
-## Contributing
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+npm install
+npm run build
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Configura en `.env` la conexión MySQL compartida. **No ejecutes** `php artisan migrate` para recrear el esquema: las tablas ya existen.
 
-## Code of Conduct
+## Scripts útiles
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer run dev   # servidor + cola + logs + Vite
+npm run build      # assets de producción
+npm run dev        # Vite en desarrollo
+```
 
-## Security Vulnerabilities
+## Licencia
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Código de aplicación interno de CDA. El framework Laravel se distribuye bajo [MIT](https://opensource.org/licenses/MIT).

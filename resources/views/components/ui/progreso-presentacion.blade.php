@@ -26,11 +26,11 @@
 @endphp
 
 @if ($estado === 'presentado')
-  <div {{ $attributes }}>
+  <div {{ $attributes->merge(['data-progreso-presentacion' => '']) }}>
     <x-ui.badge tone="success">Presentado</x-ui.badge>
   </div>
 @else
-  <div {{ $attributes->class('flex min-w-[12rem] max-w-[16rem] items-center gap-2') }}>
+  <div {{ $attributes->class('flex min-w-[12rem] max-w-[16rem] items-center gap-2')->merge(['data-progreso-presentacion' => '']) }}>
     <div class="min-w-0 flex-1">
       <div class="mb-1 flex items-center justify-between gap-2">
         <span class="truncate text-[0.7rem] font-semibold leading-none {{ $colores['texto'] }}">{{ $etiqueta }}</span>
@@ -43,7 +43,7 @@
     </div>
 
     @if ($puedeAvanzar)
-      <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" class="m-0 shrink-0">
+      <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" class="m-0 shrink-0" data-ajax-estado-presentacion>
         @csrf
         <input type="hidden" name="accion" value="avanzar">
         <x-ui.button

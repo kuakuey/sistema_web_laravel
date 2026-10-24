@@ -10,6 +10,7 @@ use App\Support\Permisos;
 use App\Support\Texto;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -247,48 +248,102 @@ class RegistroController extends Controller
         return back()->with('ok', 'Registro actualizado correctamente.');
     }
 
-    public function estadoPresentacion(Request $request, PresentacionNino $presentacion): RedirectResponse
+    public function estadoPresentacion(Request $request, PresentacionNino $presentacion): RedirectResponse|JsonResponse
     {
         $rol = $request->user()->rolNormalizado();
         abort_unless(Permisos::tieneSeccion($rol, 'presentaciones'), 403);
 
         $accion = (string) $request->input('accion');
+        $ajax = $request->expectsJson() || $request->ajax();
 
         if ($accion === 'avanzar') {
             $siguiente = ApiPresentaciones::siguienteEstado((string) $presentacion->estado);
 
             if ($siguiente === null) {
-                return back()->with('ok', 'El registro ya está presentado.');
+                return $this->respuestaEstadoPresentacion($ajax, 'El registro ya está presentado.', $presentacion, false);
             }
 
             try {
                 $resultado = ApiPresentaciones::actualizarEstado((int) $presentacion->id, $siguiente, $rol);
             } catch (\InvalidArgumentException $e) {
+                if ($ajax) {
+                    return response()->json(['exito' => false, 'mensaje' => $e->getMessage()], 422);
+                }
+
                 return back()->withErrors($e->getMessage());
             }
 
             Actividad::registrar('actualizar_estado_presentacion', 'presentaciones', 'presentacion', $presentacion->id, 'Avanzar a '.$resultado['estado_etiqueta']);
+            $presentacion->refresh();
+            notify()->success()->title($resultado['mensaje'])->send();
 
-            if ($siguiente === 'presentado') {
-                return redirect()->route('presentaciones.registros')->with('ok', $resultado['mensaje']);
+            if ($ajax) {
+                return $this->respuestaEstadoPresentacion($ajax, $resultado['mensaje'], $presentacion, $siguiente === 'presentado');
             }
 
-            return back()->with('ok', $resultado['mensaje']);
+            if ($siguiente === 'presentado') {
+                return redirect()->route('presentaciones.registros');
+            }
+
+            return back();
         }
 
         if ($accion === 'restablecer' && Permisos::controlTotal($rol)) {
             try {
                 ApiPresentaciones::actualizarEstado((int) $presentacion->id, 'recibido', $rol);
             } catch (\InvalidArgumentException $e) {
+                if ($ajax) {
+                    return response()->json(['exito' => false, 'mensaje' => $e->getMessage()], 422);
+                }
+
                 return back()->withErrors($e->getMessage());
             }
 
             Actividad::registrar('actualizar_estado_presentacion', 'presentaciones', 'presentacion', $presentacion->id, 'Restablecer estado');
+            $presentacion->refresh();
+            notify()->success()->title('Registro restablecido a Registrado.')->send();
 
-            return redirect()->route('presentaciones.nuevos')->with('ok', 'Registro restablecido a Registrado.');
+            if ($ajax) {
+                return $this->respuestaEstadoPresentacion($ajax, 'Registro restablecido a Registrado.', $presentacion, true);
+            }
+
+            return redirect()->route('presentaciones.nuevos');
         }
 
         abort(403);
+    }
+
+    private function respuestaEstadoPresentacion(bool $ajax, string $mensaje, PresentacionNino $presentacion, bool $salirLista): RedirectResponse|JsonResponse
+    {
+        if (! $ajax) {
+            return back()->with('ok', $mensaje);
+        }
+
+        $notify = session()->pull('notify');
+
+        return response()->json([
+            'exito' => true,
+            'mensaje' => $mensaje,
+            'estado' => (string) $presentacion->estado,
+            'estado_etiqueta' => ApiPresentaciones::etiquetaEstado((string) $presentacion->estado),
+            'salir_lista' => $salirLista,
+            'html' => view('components.ui.progreso-presentacion', [
+                'registro' => $presentacion,
+                'editable' => $presentacion->estado !== 'presentado',
+            ])->render(),
+            'notify' => is_array($notify) ? [
+                'title' => $notify['title'] ?? $mensaje,
+                'message' => $notify['message'] ?? null,
+                'type' => ($notify['type'] ?? null) instanceof \BackedEnum
+                    ? $notify['type']->value
+                    : (string) ($notify['type'] ?? 'success'),
+                'duration' => (int) ($notify['duration'] ?? config('notify.timeout', 5000)),
+            ] : [
+                'title' => $mensaje,
+                'type' => 'success',
+                'duration' => (int) config('notify.timeout', 5000),
+            ],
+        ]);
     }
 
     public function eliminarInscripcion(Request $request, Inscripcion $inscripcion): RedirectResponse

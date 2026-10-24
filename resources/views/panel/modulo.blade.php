@@ -17,7 +17,7 @@
 <x-ui.page-header :title="$titulo" :subtitle="$soloLectura ? 'Consulta de los datos actuales del sistema' : 'Consulta y registro de información'">
   <x-slot:actions>
     @if ($registros)
-      <x-ui.badge tone="accent">{{ $registros->total() }} resultado(s)</x-ui.badge>
+      <x-ui.badge tone="accent" data-resultados-total>{{ $registros->total() }} resultado(s)</x-ui.badge>
     @endif
     @if ($puedeRegistrar && ! $errorBd)
       <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevo">{{ $etiquetaNuevo }}</x-ui.button>
@@ -88,7 +88,7 @@
                 <div class="flex items-center justify-end gap-1">
                   <x-ui.ver :target="'detalle-ofrenda-'.$registro->id" />
                   @if ($puedeEditar)
-                    <form method="POST" action="{{ route('ofrendas.eliminar', $registro) }}" data-confirm="¿Eliminar esta ofrenda? Esta acción no se puede deshacer.">
+                    <form method="POST" action="{{ route('ofrendas.eliminar', $registro) }}" data-ajax-remove-row data-confirm="¿Eliminar esta ofrenda? Esta acción no se puede deshacer.">
                       @csrf @method('DELETE')
                       <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                     </form>
@@ -111,7 +111,7 @@
                 <div class="flex items-center justify-end gap-1">
                   <x-ui.ver :target="'detalle-consejeria-'.$registro->id" />
                   @if ($puedeEditar)
-                    <form method="POST" action="{{ route('consejeria.eliminar', $registro) }}" data-confirm="¿Eliminar esta consejería? Esta acción no se puede deshacer.">
+                    <form method="POST" action="{{ route('consejeria.eliminar', $registro) }}" data-ajax-remove-row data-confirm="¿Eliminar esta consejería? Esta acción no se puede deshacer.">
                       @csrf @method('DELETE')
                       <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                     </form>

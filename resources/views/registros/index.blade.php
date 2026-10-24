@@ -13,10 +13,14 @@
   $abrirFormulario = $errors->any();
 @endphp
 
+@if ($esPresentaciones)
+  <div hidden data-presentaciones-pestana="{{ $pestaña }}"></div>
+@endif
+
 <x-ui.page-header :title="$tituloSeccion" :subtitle="$subtitulo">
   <x-slot:actions>
     @if (! $errorBd)
-      <x-ui.badge tone="accent">{{ $registros->total() }} resultado(s)</x-ui.badge>
+      <x-ui.badge tone="accent" data-resultados-total>{{ $registros->total() }} resultado(s)</x-ui.badge>
     @endif
     @if ($puedeRegistrar && ! $errorBd)
       <x-ui.button type="button" icon="plus-lg" data-modal-open="dialogNuevo">
@@ -114,7 +118,7 @@
               <td>
                 <div class="flex items-center justify-end gap-1">
                   @if ($registro->estado === 'presentado' && $puedeEditar)
-                    <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" data-confirm="¿Restablecer el estado de esta presentación?">
+                    <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" data-ajax-estado-presentacion data-confirm="¿Restablecer el estado de esta presentación?">
                       @csrf
                       <input type="hidden" name="accion" value="restablecer">
                       <x-ui.button type="submit" size="sm" variant="ghost" icon="arrow-counterclockwise" title="Restablecer" aria-label="Restablecer" />
@@ -122,7 +126,7 @@
                   @endif
                   <x-ui.ver :target="'detalle-presentacion-'.$registro->id" />
                   @if ($puedeEditar)
-                    <form method="POST" action="{{ route('presentaciones.eliminar', $registro) }}" data-confirm="¿Eliminar esta presentación? Esta acción no se puede deshacer.">
+                    <form method="POST" action="{{ route('presentaciones.eliminar', $registro) }}" data-ajax-remove-row data-confirm="¿Eliminar esta presentación? Esta acción no se puede deshacer.">
                       @csrf @method('DELETE')
                       <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                     </form>
@@ -158,21 +162,21 @@
               <td>
                 <div class="flex items-center justify-end gap-1">
                   @if ($seccion === 'conexion' && ! $registro->contactado && $puedeEstadoConexion)
-                    <form method="POST" action="{{ route('registros.estado', $registro) }}">
+                    <form method="POST" action="{{ route('registros.estado', $registro) }}" data-ajax-remove-row>
                       @csrf
                       <input type="hidden" name="accion" value="contactado">
                       <x-ui.button type="submit" size="sm" variant="success" icon="check2">Contactado</x-ui.button>
                     </form>
                   @endif
                   @if ($seccion === 'bautismo' && $registro->estado_bautismo !== 'bautizado')
-                    <form method="POST" action="{{ route('registros.estado', $registro) }}">
+                    <form method="POST" action="{{ route('registros.estado', $registro) }}" data-ajax-remove-row>
                       @csrf
                       <input type="hidden" name="accion" value="bautizado">
                       <x-ui.button type="submit" size="sm" variant="success" icon="check2">Bautizado</x-ui.button>
                     </form>
                   @endif
                   @if ($puedeEditar && (($seccion === 'bautismo' && $registro->estado_bautismo === 'bautizado') || ($seccion === 'conexion' && $registro->contactado)))
-                    <form method="POST" action="{{ route('registros.estado', $registro) }}" data-confirm="¿Restablecer el estado de este registro?">
+                    <form method="POST" action="{{ route('registros.estado', $registro) }}" data-ajax-remove-row data-confirm="¿Restablecer el estado de este registro?">
                       @csrf
                       <input type="hidden" name="accion" value="restablecer">
                       <x-ui.button type="submit" size="sm" variant="ghost" icon="arrow-counterclockwise">Restablecer</x-ui.button>
@@ -180,7 +184,7 @@
                   @endif
                   <x-ui.ver :target="'detalle-inscripcion-'.$registro->id" />
                   @if ($puedeEditar)
-                    <form method="POST" action="{{ route('registros.eliminar', $registro) }}" data-confirm="¿Eliminar este registro? Esta acción no se puede deshacer.">
+                    <form method="POST" action="{{ route('registros.eliminar', $registro) }}" data-ajax-remove-row data-confirm="¿Eliminar este registro? Esta acción no se puede deshacer.">
                       @csrf @method('DELETE')
                       <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                     </form>

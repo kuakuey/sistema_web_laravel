@@ -18,6 +18,20 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::defaultView('pagination.cda');
 
+        View::composer(['layouts.app', 'layouts.guest'], function (): void {
+            if (session()->has('notify')) {
+                return;
+            }
+
+            if (session()->has('ok')) {
+                notify()->success()->title((string) session()->pull('ok'))->send();
+            }
+
+            if (session()->has('error')) {
+                notify()->error()->title((string) session()->pull('error'))->send();
+            }
+        });
+
         View::composer('layouts.app', function ($view): void {
             $usuario = auth()->user();
             $rol = $usuario?->rolNormalizado() ?? '';

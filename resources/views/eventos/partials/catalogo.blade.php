@@ -49,7 +49,7 @@
                   @csrf @method('DELETE')
                   <x-ui.button type="submit" size="sm" variant="ghost" icon="eraser" aria-label="Vaciar registros"></x-ui.button>
                 </form>
-                <form method="POST" action="{{ route('eventos.eliminar', $evento) }}" data-confirm="¿Eliminar este evento y todos sus registros?">
+                <form method="POST" action="{{ route('eventos.eliminar', $evento) }}" data-ajax-remove-row data-confirm="¿Eliminar este evento y todos sus registros?">
                   @csrf @method('DELETE')
                   <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                 </form>

@@ -15,7 +15,7 @@
       <x-ui.alert type="danger" class="mb-5">{{ $errors->first() }}</x-ui.alert>
     @endif
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-5" novalidate>
+    <form method="POST" action="{{ route('login') }}" class="space-y-5" novalidate data-no-ajax>
       @csrf
 
       <x-ui.field label="Usuario" name="usuario">

@@ -14,5 +14,7 @@
 
     @yield('content')
   </div>
+
+  <x-notify::notify />
 </body>
 </html>

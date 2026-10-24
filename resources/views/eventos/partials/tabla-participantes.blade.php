@@ -98,7 +98,7 @@
             <div class="flex items-center justify-end gap-1">
               <x-ui.ver :target="'detalle-participante-'.$registro->id" />
               @if ($puedeEditar)
-                <form method="POST" action="{{ route('eventos.participantes.eliminar', $registro) }}" data-confirm="¿Eliminar este registro?">
+                <form method="POST" action="{{ route('eventos.participantes.eliminar', $registro) }}" data-ajax-remove-row data-confirm="¿Eliminar este registro?">
                   @csrf @method('DELETE')
                   <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                 </form>

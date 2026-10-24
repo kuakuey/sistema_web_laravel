@@ -31,5 +31,7 @@
       <x-ui.button data-confirm-accept class="!bg-danger !text-accent-ink hover:!brightness-110">Confirmar</x-ui.button>
     </div>
   </dialog>
+
+  <x-notify::notify />
 </body>
 </html>

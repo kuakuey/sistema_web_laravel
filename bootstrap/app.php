@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.key' => \App\Http\Middleware\VerificarClaveApi::class,
         ]);
+
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\ConvertirRespuestaAjax::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

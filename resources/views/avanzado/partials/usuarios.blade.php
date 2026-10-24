@@ -33,7 +33,7 @@
                 data-usuario-nombre="{{ $usuario->usuario }}"
               ></x-ui.button>
               @if ($usuario->id !== auth()->id())
-                <form method="POST" action="{{ route('avanzado.usuarios.eliminar', $usuario) }}" data-confirm="¿Eliminar el usuario {{ $usuario->usuario }}?">
+                <form method="POST" action="{{ route('avanzado.usuarios.eliminar', $usuario) }}" data-ajax-remove-row data-confirm="¿Eliminar el usuario {{ $usuario->usuario }}?">
                   @csrf @method('DELETE')
                   <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                 </form>

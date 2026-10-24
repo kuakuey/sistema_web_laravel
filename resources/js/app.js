@@ -1,7 +1,13 @@
 import './http';
 import './icons';
+import Alpine from 'alpinejs';
+import './ajax';
 import './eventos';
 import './estructura';
+import './presentaciones';
+
+window.Alpine = Alpine;
+Alpine.start();
 
 const raiz = document.documentElement;
 
@@ -340,9 +346,18 @@ function bloquearFormulario(formulario) {
     return true;
 }
 
-/* Confirmación elegante para formularios con data-confirm */
+/* Confirmación + envío AJAX de formularios POST */
 const dialogo = document.getElementById('confirmDialog');
 let formularioPendiente = null;
+
+function enviarFormularioSistema(formulario) {
+    if (formulario.hasAttribute('data-ajax-estado-presentacion')) {
+        window.cdaEnviarEstadoPresentacion?.(formulario);
+        return;
+    }
+
+    window.cdaAjax?.enviar(formulario);
+}
 
 document.addEventListener('submit', (evento) => {
     const formulario = evento.target;
@@ -363,17 +378,34 @@ document.addEventListener('submit', (evento) => {
         return;
     }
 
+    if (window.cdaAjax?.omitir(formulario)) {
+        const mensajeOmitir = formulario.dataset.confirm;
+
+        if (mensajeOmitir && dialogo) {
+            evento.preventDefault();
+            formularioPendiente = formulario;
+            dialogo.querySelector('[data-confirm-message]').textContent = mensajeOmitir;
+            dialogo.showModal();
+            return;
+        }
+
+        bloquearFormulario(formulario);
+        return;
+    }
+
+    evento.preventDefault();
+    evento.stopPropagation();
+
     const mensaje = formulario.dataset.confirm;
 
     if (mensaje && dialogo) {
-        evento.preventDefault();
         formularioPendiente = formulario;
         dialogo.querySelector('[data-confirm-message]').textContent = mensaje;
         dialogo.showModal();
         return;
     }
 
-    bloquearFormulario(formulario);
+    enviarFormularioSistema(formulario);
 });
 
 if (dialogo) {
@@ -383,9 +415,18 @@ if (dialogo) {
         formularioPendiente = null;
         dialogo.close();
 
-        if (formulario && bloquearFormulario(formulario)) {
-            formulario.submit();
+        if (!formulario) {
+            return;
         }
+
+        if (window.cdaAjax?.omitir(formulario)) {
+            if (bloquearFormulario(formulario)) {
+                formulario.submit();
+            }
+            return;
+        }
+
+        enviarFormularioSistema(formulario);
     });
 
     dialogo.querySelector('[data-confirm-cancel]')?.addEventListener('click', () => {

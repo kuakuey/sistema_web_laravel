@@ -92,7 +92,7 @@
       </button>
     </div>
 
-    <form method="POST" action="{{ route('logout') }}" class="mt-1">
+    <form method="POST" action="{{ route('logout') }}" class="mt-1" data-no-ajax>
       @csrf
       <button type="submit" class="sidebar-link relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted transition hover:bg-danger-soft hover:text-danger">
         <x-ui.icon name="box-arrow-right" class="w-4 shrink-0 text-center" />

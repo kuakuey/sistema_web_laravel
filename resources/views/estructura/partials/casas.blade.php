@@ -51,7 +51,7 @@
             <div class="flex items-center justify-end gap-1">
               <x-ui.ver :target="'detalle-casa-'.$registro->id" />
               @if ($puedeEditar)
-                <form method="POST" action="{{ route('estructura.casas.eliminar', $registro) }}" data-confirm="¿Eliminar esta casa de vida? Esta acción no se puede deshacer.">
+                <form method="POST" action="{{ route('estructura.casas.eliminar', $registro) }}" data-ajax-remove-row data-confirm="¿Eliminar esta casa de vida? Esta acción no se puede deshacer.">
                   @csrf @method('DELETE')
                   <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>
                 </form>
