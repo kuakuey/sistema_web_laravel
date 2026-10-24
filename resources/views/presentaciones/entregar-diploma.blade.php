@@ -26,6 +26,7 @@
         @foreach ($registros as $registro)
           @php
             $fila = ApiPresentaciones::formatear($registro);
+            $ordenParentesco = ['padre' => 0, 'madre' => 1];
             $representantes = collect($fila['representantes'] ?? [])
               ->map(function (array $rep) {
                   $nombre = trim((string) ($rep['nombre'] ?? ''));
@@ -45,11 +46,13 @@
                   }
 
                   return [
+                      'clave' => (string) ($rep['parentesco'] ?? ''),
                       'parentesco' => $rep['parentesco_etiqueta'] ?? 'Representante',
                       'nombre' => $corto,
                   ];
               })
               ->filter()
+              ->sortBy(fn (array $rep) => $ordenParentesco[$rep['clave']] ?? 99)
               ->values();
           @endphp
           <li
