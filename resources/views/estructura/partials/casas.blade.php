@@ -31,23 +31,23 @@
   @else
     <x-ui.table>
       <x-slot:head>
-        <th>Casa</th>
+        <th class="col-prio">Casa</th>
         <th>Ministerio</th>
         <th>Líder</th>
         <th>Colaborador</th>
         <th>Anfitrión</th>
         <th>Dirección</th>
-        <th class="text-right">Acciones</th>
+        <th class="col-acciones text-right">Acciones</th>
       </x-slot:head>
       @foreach ($registros as $registro)
         <tr>
-          <td class="font-medium">{{ $registro->nombre }}</td>
+          <td class="col-prio font-medium">{{ $registro->nombre }}</td>
           <td>{{ $registro->territorio?->nombre ?: '—' }}</td>
           <td>{{ $registro->lider?->nombreCompleto() ?: '—' }}</td>
           <td class="text-muted">{{ $registro->colaborador?->nombreCompleto() ?: '—' }}</td>
           <td class="text-muted">{{ $registro->anfitrion?->nombreCompleto() ?: '—' }}</td>
           <td class="text-muted">{{ $registro->direccion }}</td>
-          <td>
+          <td class="col-acciones">
             <div class="flex items-center justify-end gap-1">
               <x-ui.ver :target="'detalle-casa-'.$registro->id" />
               @if ($puedeEditar)

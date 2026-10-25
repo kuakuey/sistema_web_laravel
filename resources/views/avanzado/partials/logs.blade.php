@@ -49,18 +49,18 @@
     <x-ui.table>
       <x-slot:head>
         <th>Fecha y hora</th>
-        <th>Usuario</th>
+        <th class="col-prio">Usuario</th>
         <th>Acción</th>
         <th>Sección</th>
-        <th class="text-right">Detalle</th>
+        <th class="col-acciones text-right">Detalle</th>
       </x-slot:head>
       @foreach ($logs as $fila)
         <tr>
           <td class="tabular-nums text-muted">{{ \Illuminate\Support\Carbon::parse($fila->creado_en)->format('d/m/Y H:i') }}</td>
-          <td>{{ $fila->usuario_nombre ?: ($fila->usuario_login ?: '—') }}</td>
+          <td class="col-prio">{{ $fila->usuario_nombre ?: ($fila->usuario_login ?: '—') }}</td>
           <td><x-ui.badge>{{ \App\Support\Actividad::etiquetaAccion((string) $fila->accion) }}</x-ui.badge></td>
           <td>{{ $etiquetasSeccionesLog[$fila->seccion] ?? ($fila->seccion ?: '—') }}</td>
-          <td>
+          <td class="col-acciones">
             <div class="flex justify-end">
               <x-ui.ver :target="'detalle-actividad-'.$fila->id" />
             </div>

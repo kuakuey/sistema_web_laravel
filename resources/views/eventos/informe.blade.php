@@ -25,7 +25,7 @@
   @else
     <x-ui.table>
       <x-slot:head>
-        <th>Nombre</th>
+        <th class="col-prio">Nombre</th>
         <th>Tipo</th>
         @if ($evento->requiere_numeracion)<th>Numeración</th>@endif
         <th>Valor</th>
@@ -34,7 +34,7 @@
       </x-slot:head>
       @foreach ($registros as $registro)
         <tr>
-          <td class="font-medium">{{ $registro->nombre }}</td>
+          <td class="col-prio font-medium">{{ $registro->nombre }}</td>
           <td>{{ $registro->tipo_entrada ?: '—' }}</td>
           @if ($evento->requiere_numeracion)
             <td class="tabular-nums">{{ $registro->numeracion ?: '—' }}</td>

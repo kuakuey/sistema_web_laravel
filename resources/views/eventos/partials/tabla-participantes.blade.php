@@ -50,7 +50,7 @@
   @else
     <x-ui.table>
       <x-slot:head>
-        <th>Nombre</th>
+        <th class="col-prio">Nombre</th>
         @unless ($esParticipantes)<th>Evento</th>@endunless
         @if ($mostrarNumeracion)<th>Numeración</th>@endif
         <th>Tipo entrada</th>
@@ -59,11 +59,11 @@
         <th>Estado</th>
         @if ($esParticipantes)<th>Asistencia</th>@endif
         @unless ($esParticipantes)<th>Registrado</th>@endunless
-        <th class="text-right">Acciones</th>
+        <th class="col-acciones text-right">Acciones</th>
       </x-slot:head>
       @foreach ($registros as $registro)
         <tr>
-          <td class="font-medium">{{ $registro->nombre }}</td>
+          <td class="col-prio font-medium">{{ $registro->nombre }}</td>
           @unless ($esParticipantes)
             <td>
               @if ($registro->evento)
@@ -94,7 +94,7 @@
           @unless ($esParticipantes)
             <td class="text-muted tabular-nums">{{ optional($registro->creado_en)->format('d/m/Y') }}</td>
           @endunless
-          <td>
+          <td class="col-acciones">
             <div class="flex items-center justify-end gap-1">
               <x-ui.ver :target="'detalle-participante-'.$registro->id" />
               @if ($puedeEditar)

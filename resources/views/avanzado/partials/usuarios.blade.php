@@ -7,20 +7,20 @@
     <x-ui.table>
       <x-slot:head>
         <th class="w-12">#</th>
-        <th>Usuario</th>
+        <th class="col-prio">Usuario</th>
         <th>Nombre</th>
         <th>Rol</th>
         <th>Creado</th>
-        <th class="text-right">Acciones</th>
+        <th class="col-acciones text-right">Acciones</th>
       </x-slot:head>
       @foreach ($usuarios as $indice => $usuario)
         <tr>
           <td class="text-muted tabular-nums">{{ $indice + 1 }}</td>
-          <td class="font-medium">{{ $usuario->usuario }}</td>
+          <td class="col-prio font-medium">{{ $usuario->usuario }}</td>
           <td class="text-muted">{{ $usuario->nombre ?: '—' }}</td>
           <td><x-ui.badge tone="accent">{{ $roles[$usuario->rolNormalizado()] ?? $usuario->rol }}</x-ui.badge></td>
           <td class="text-muted tabular-nums">{{ optional($usuario->creado_en)->format('d/m/Y H:i') ?: '—' }}</td>
-          <td>
+          <td class="col-acciones">
             <div class="flex items-center justify-end gap-1">
               <x-ui.button
                 type="button"

@@ -6,7 +6,6 @@
     <span class="mx-auto mb-5 grid size-12 place-items-center rounded-xl bg-accent text-accent-ink shadow-sm">
       <x-ui.icon name="grid-1x2-fill" class="text-lg" />
     </span>
-    <!-- <h1 class="text-xl font-semibold tracking-tight">Sistema CDA</h1> -->
   </div>
 
   <x-ui.card class="shadow-[0_8px_30px_-12px_rgb(15_23_42/0.18)]">
@@ -17,10 +16,10 @@
     <form method="POST" action="{{ route('login') }}" class="space-y-5" novalidate data-no-ajax>
       @csrf
 
-      <x-ui.field label="Correo electrónico" name="usuario">
+      <x-ui.field label="Usuario" name="usuario">
         <div class="relative">
           <x-ui.icon name="person" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
-          <input type="text" id="usuario" name="usuario" value="{{ old('usuario') }}" class="input pl-9" placeholder="Correo electrónico" autocomplete="username" autofocus required>
+          <input type="text" id="usuario" name="usuario" value="{{ old('usuario') }}" class="input pl-9" placeholder="Tu usuario" autocomplete="username" autofocus required>
         </div>
       </x-ui.field>
 

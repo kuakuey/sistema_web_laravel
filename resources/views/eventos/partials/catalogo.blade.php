@@ -8,17 +8,17 @@
   @else
     <x-ui.table>
       <x-slot:head>
-        <th>Nombre</th>
+        <th class="col-prio">Nombre</th>
         <th>Fecha</th>
         <th>Tipos de entrada</th>
         <th>Numeración</th>
         <th>Estado</th>
         <th>Registros</th>
-        <th class="text-right">Acciones</th>
+        <th class="col-acciones text-right">Acciones</th>
       </x-slot:head>
       @foreach ($catalogo as $evento)
         <tr>
-          <td class="font-medium">
+          <td class="col-prio font-medium">
             @if ($puedeVerParticipantes)
               <a class="text-accent hover:underline" href="{{ route('eventos.participantes', $evento->slug()) }}">{{ $evento->nombre }}</a>
             @else
@@ -34,7 +34,7 @@
             </x-ui.badge>
           </td>
           <td class="tabular-nums">{{ $evento->registros_count }}</td>
-          <td>
+          <td class="col-acciones">
             <div class="flex items-center justify-end gap-1">
               @if ($puedeVerInforme)
                 <x-ui.button href="{{ route('eventos.informe.pdf', $evento) }}" size="sm" variant="ghost" icon="file-earmark-pdf" aria-label="Descargar PDF"></x-ui.button>

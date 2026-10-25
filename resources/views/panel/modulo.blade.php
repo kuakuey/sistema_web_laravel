@@ -63,17 +63,17 @@
       <x-ui.table>
         <x-slot:head>
           @if ($seccion === 'ofrendas')
-            <th>Fecha</th><th>Casa de vida</th><th>Líder</th><th class="text-right">Monto</th><th class="text-right">Acciones</th>
+            <th>Fecha</th><th class="col-prio">Casa de vida</th><th>Líder</th><th class="text-right">Monto</th><th class="col-acciones text-right">Acciones</th>
           @elseif ($seccion === 'consejeria')
-            <th>Nombre</th><th>Teléfono</th><th>Tipo</th><th>Cita</th><th>Registrado</th><th class="text-right">Acciones</th>
+            <th class="col-prio">Nombre</th><th>Teléfono</th><th>Tipo</th><th>Cita</th><th>Registrado</th><th class="col-acciones text-right">Acciones</th>
           @elseif ($seccion === 'valores_adicionales')
-            <th>Fecha</th><th>Tipo</th><th>Nombre</th><th>Teléfono</th><th class="text-right">Valor</th><th class="text-right">Acciones</th>
+            <th>Fecha</th><th>Tipo</th><th class="col-prio">Nombre</th><th>Teléfono</th><th class="text-right">Valor</th><th class="col-acciones text-right">Acciones</th>
           @elseif ($seccion === 'networking')
-            <th>Nombre</th><th>Empresa</th><th>Categoría</th><th>WhatsApp</th><th>Visible</th><th class="text-right">Acciones</th>
+            <th class="col-prio">Nombre</th><th>Empresa</th><th>Categoría</th><th>WhatsApp</th><th>Visible</th><th class="col-acciones text-right">Acciones</th>
           @elseif ($seccion === 'eventos')
-            <th>Nombre</th><th>Fecha</th><th class="text-right">Valor</th><th>Estado</th><th class="text-right">Acciones</th>
+            <th class="col-prio">Nombre</th><th>Fecha</th><th class="text-right">Valor</th><th>Estado</th><th class="col-acciones text-right">Acciones</th>
           @elseif ($seccion === 'calendario')
-            <th>Título</th><th>Inicio</th><th>Fin</th><th>Estado</th><th class="text-right">Acciones</th>
+            <th class="col-prio">Título</th><th>Inicio</th><th>Fin</th><th>Estado</th><th class="col-acciones text-right">Acciones</th>
           @endif
         </x-slot:head>
 
@@ -81,10 +81,10 @@
           <tr>
             @if ($seccion === 'ofrendas')
               <td class="text-muted tabular-nums">{{ optional($registro->fecha_ofrenda)->format('d/m/Y') }}</td>
-              <td class="font-medium">{{ $registro->casa_vida ?: '—' }}</td>
+              <td class="col-prio font-medium">{{ $registro->casa_vida ?: '—' }}</td>
               <td>{{ $registro->lider ?: '—' }}</td>
               <td class="text-right font-medium tabular-nums">{{ $dinero($registro->monto) }}</td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end gap-1">
                   <x-ui.ver :target="'detalle-ofrenda-'.$registro->id" />
                   @if ($puedeEditar)
@@ -96,7 +96,7 @@
                 </div>
               </td>
             @elseif ($seccion === 'consejeria')
-              <td class="font-medium">{{ $registro->nombre_completo }}</td>
+              <td class="col-prio font-medium">{{ $registro->nombre_completo }}</td>
               <td class="text-muted tabular-nums">{{ $registro->telefono }}</td>
               <td><x-ui.badge tone="accent">{{ $tiposConsejeria[$registro->tipo_consejeria] ?? $registro->tipo_consejeria }}</x-ui.badge></td>
               <td class="text-muted tabular-nums">
@@ -107,7 +107,7 @@
                 @endif
               </td>
               <td class="text-muted tabular-nums">{{ optional($registro->creado_en)->format('d/m/Y') }}</td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end gap-1">
                   <x-ui.ver :target="'detalle-consejeria-'.$registro->id" />
                   @if ($puedeEditar)
@@ -121,41 +121,41 @@
             @elseif ($seccion === 'valores_adicionales')
               <td class="text-muted tabular-nums">{{ optional($registro->fecha)->format('d/m/Y') }}</td>
               <td><x-ui.badge>{{ $registro->tipo }}</x-ui.badge></td>
-              <td class="font-medium">{{ $registro->nombre }}</td>
+              <td class="col-prio font-medium">{{ $registro->nombre }}</td>
               <td class="text-muted tabular-nums">{{ $registro->telefono }}</td>
               <td class="text-right font-medium tabular-nums">{{ $dinero($registro->valor) }}</td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end">
                   <x-ui.ver :target="'detalle-valor-'.$registro->id" />
                 </div>
               </td>
             @elseif ($seccion === 'networking')
-              <td class="font-medium">{{ $registro->nombre }}</td>
+              <td class="col-prio font-medium">{{ $registro->nombre }}</td>
               <td>{{ $registro->empresa }}</td>
               <td><x-ui.badge>{{ $registro->categoria }}</x-ui.badge></td>
               <td class="text-muted tabular-nums">{{ $registro->whatsapp }}</td>
               <td><x-ui.badge :tone="$registro->visible ? 'success' : 'neutral'">{{ $registro->visible ? 'Visible' : 'Oculto' }}</x-ui.badge></td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end">
                   <x-ui.ver :target="'detalle-networking-'.$registro->id" />
                 </div>
               </td>
             @elseif ($seccion === 'eventos')
-              <td class="font-medium">{{ $registro->nombre }}</td>
+              <td class="col-prio font-medium">{{ $registro->nombre }}</td>
               <td class="text-muted tabular-nums">{{ optional($registro->fecha)->format('d/m/Y') ?: '—' }}</td>
               <td class="text-right tabular-nums">{{ $dinero($registro->valor) }}</td>
               <td><x-ui.badge :tone="$registro->habilitado ? 'success' : 'neutral'">{{ $registro->habilitado ? 'Habilitado' : 'Deshabilitado' }}</x-ui.badge></td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end">
                   <x-ui.ver :target="'detalle-evento-'.$registro->id" />
                 </div>
               </td>
             @elseif ($seccion === 'calendario')
-              <td class="font-medium">{{ $registro->titulo }}</td>
+              <td class="col-prio font-medium">{{ $registro->titulo }}</td>
               <td class="text-muted tabular-nums">{{ optional($registro->fecha)->format('d/m/Y') }}</td>
               <td class="text-muted tabular-nums">{{ optional($registro->fecha_fin)->format('d/m/Y') ?: '—' }}</td>
               <td><x-ui.badge :tone="$registro->activo ? 'success' : 'neutral'">{{ $registro->activo ? 'Activo' : 'Inactivo' }}</x-ui.badge></td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end">
                   <x-ui.ver :target="'detalle-calendario-'.$registro->id" />
                 </div>

@@ -4,6 +4,10 @@
  */
 @import 'tailwindcss';
 
+[x-cloak] {
+    display: none !important;
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/mckenziearts/laravel-notify/resources/views/**/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -195,6 +199,26 @@
 
     .data-table tbody td.celda-wrap {
         @apply whitespace-normal;
+    }
+
+    @media (max-width: 639px) {
+        .data-table:has(.col-prio) th:not(.col-prio):not(.col-acciones),
+        .data-table:has(.col-prio) td:not(.col-prio):not(.col-acciones) {
+            display: none;
+        }
+
+        .data-table:has(.col-prio) th.col-prio,
+        .data-table:has(.col-prio) td.col-prio {
+            width: 100%;
+            max-width: 0;
+            white-space: normal;
+        }
+
+        .data-table:has(.col-prio) th.col-acciones,
+        .data-table:has(.col-prio) td.col-acciones {
+            width: 1%;
+            white-space: nowrap;
+        }
     }
 
     .link-whatsapp {

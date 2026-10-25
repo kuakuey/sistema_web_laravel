@@ -68,14 +68,14 @@
       <x-ui.table>
         <x-slot:head>
           @if ($seccion === 'generales')
-            <th>Sección</th><th>Nombre</th><th>Contacto</th><th>Hora</th><th class="text-right">Acciones</th>
+            <th>Sección</th><th class="col-prio">Nombre</th><th>Contacto</th><th>Hora</th><th class="col-acciones text-right">Acciones</th>
           @elseif ($esPresentaciones)
-            <th>Niño</th><th>Contactos</th><th>Progreso</th><th>Fecha</th><th class="text-right">Acciones</th>
+            <th class="col-prio">Niño</th><th>Contactos</th><th>Progreso</th><th>Fecha</th><th class="col-acciones text-right">Acciones</th>
           @else
-            <th>Nombre</th><th>Teléfono</th>
+            <th class="col-prio">Nombre</th><th>Teléfono</th>
             @if ($seccion === 'conexion')<th>Zona</th><th>Estado</th>@endif
             @if ($seccion === 'bautismo')<th>Estado</th>@endif
-            <th>Registrado</th><th class="text-right">Acciones</th>
+            <th>Registrado</th><th class="col-acciones text-right">Acciones</th>
           @endif
         </x-slot:head>
 
@@ -83,7 +83,7 @@
           @if ($seccion === 'generales')
             <tr>
               <td><x-ui.badge>{{ $etiquetas[$registro['seccion']] ?? $registro['seccion'] }}</x-ui.badge></td>
-              <td class="font-medium">{{ $registro['nombre'] }}</td>
+              <td class="col-prio font-medium">{{ $registro['nombre'] }}</td>
               <td @class(['celda-wrap' => ($registro['origen'] ?? '') === 'presentacion'])>
                 @if (($registro['origen'] ?? '') === 'presentacion' && isset($registro['modelo']))
                   {!! \App\Support\DetalleRegistro::contactosPresentacion($registro['modelo']) !!}
@@ -92,7 +92,7 @@
                 @endif
               </td>
               <td class="text-muted tabular-nums">{{ optional($registro['creado_en'])->format('H:i') }}</td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end">
                   <x-ui.ver :target="'detalle-general-'.$registro['origen'].'-'.$registro['id']" />
                 </div>
@@ -100,7 +100,7 @@
             </tr>
           @elseif ($esPresentaciones)
             <tr>
-              <td>
+              <td class="col-prio">
                 <p class="font-medium">{{ $registro->nombre_presentado }}</p>
                 @php $edadNino = \App\Support\DetalleRegistro::edad($registro->fecha_nacimiento); @endphp
                 @if ($edadNino !== '—')
@@ -115,7 +115,7 @@
                 />
               </td>
               <td class="text-muted tabular-nums">{{ optional($registro->creado_en)->format('d/m/Y') }}</td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end gap-1">
                   @if ($registro->estado === 'presentado' && $puedeEditar)
                     <form method="POST" action="{{ route('presentaciones.estado', $registro) }}" data-ajax-estado-presentacion data-confirm="¿Restablecer el estado de esta presentación?">
@@ -136,7 +136,7 @@
             </tr>
           @else
             <tr>
-              <td>
+              <td class="col-prio">
                 <p class="font-medium">{{ $registro->nombre }} {{ $registro->apellido }}</p>
                 @if ($registro->email)
                   <p class="mt-0.5 text-xs text-muted">{{ $registro->email }}</p>
@@ -159,7 +159,7 @@
                 </td>
               @endif
               <td class="text-muted tabular-nums">{{ optional($registro->creado_en)->format('d/m/Y H:i') }}</td>
-              <td>
+              <td class="col-acciones">
                 <div class="flex items-center justify-end gap-1">
                   @if ($seccion === 'conexion' && ! $registro->contactado && $puedeEstadoConexion)
                     <form method="POST" action="{{ route('registros.estado', $registro) }}" data-ajax-remove-row>

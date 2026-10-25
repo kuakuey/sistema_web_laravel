@@ -18,15 +18,15 @@
   @else
     <x-ui.table>
       <x-slot:head>
-        <th>Nombre</th>
+        <th class="col-prio">Nombre</th>
         <th>Celular</th>
-        <th class="text-right">Acciones</th>
+        <th class="col-acciones text-right">Acciones</th>
       </x-slot:head>
       @foreach ($registros as $registro)
         <tr>
-          <td class="font-medium">{{ $registro->nombreCompleto() }}</td>
+          <td class="col-prio font-medium">{{ $registro->nombreCompleto() }}</td>
           <td class="text-muted">{{ $registro->celular ?: '—' }}</td>
-          <td>
+          <td class="col-acciones">
             <div class="flex items-center justify-end gap-1">
               <x-ui.ver :target="'detalle-miembro-'.$registro->id" />
               @if ($puedeEditar)

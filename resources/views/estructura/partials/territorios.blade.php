@@ -19,10 +19,10 @@
     <x-ui.table>
       <x-slot:head>
         <th>Categoría</th>
-        <th>Ministerio</th>
+        <th class="col-prio">Ministerio</th>
         <th>Coordinadores</th>
         <th>Encargados</th>
-        <th class="text-right">Acciones</th>
+        <th class="col-acciones text-right">Acciones</th>
       </x-slot:head>
       @foreach ($registros as $registro)
         @php
@@ -31,10 +31,10 @@
         @endphp
         <tr>
           <td class="text-muted">{{ $registro->nombreCategoria() }}</td>
-          <td class="font-medium">{{ $registro->nombre }}</td>
+          <td class="col-prio font-medium">{{ $registro->nombre }}</td>
           <td class="text-muted">{{ $coordinadores ? implode(', ', $coordinadores) : 'Sin asignar' }}</td>
           <td class="text-muted">{{ $encargados ? implode(', ', $encargados) : 'Sin asignar' }}</td>
-          <td>
+          <td class="col-acciones">
             <div class="flex items-center justify-end gap-1">
               <x-ui.ver :target="'detalle-territorio-'.$registro->id" />
               @if ($puedeEditar)
