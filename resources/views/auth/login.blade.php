@@ -16,10 +16,10 @@
     <form method="POST" action="{{ route('login') }}" class="space-y-5" novalidate data-no-ajax>
       @csrf
 
-      <x-ui.field label="Usuario" name="usuario">
+      <x-ui.field label="Correo electrónico" name="usuario">
         <div class="relative">
           <x-ui.icon name="person" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
-          <input type="text" id="usuario" name="usuario" value="{{ old('usuario') }}" class="input pl-9" placeholder="Tu usuario" autocomplete="username" autofocus required>
+          <input type="text" id="usuario" name="usuario" value="{{ old('usuario') }}" class="input pl-9" placeholder="Correo electrónico" autocomplete="username" autofocus required>
         </div>
       </x-ui.field>
 
