@@ -84,7 +84,6 @@
             <tr>
               <td class="col-prio">
                 <x-ui.badge>{{ $etiquetas[$registro['seccion']] ?? $registro['seccion'] }}</x-ui.badge>
-                <p class="mt-1 font-medium sm:hidden">{{ $registro['nombre'] }}</p>
               </td>
               <td class="font-medium">{{ $registro['nombre'] }}</td>
               <td @class(['celda-wrap' => ($registro['origen'] ?? '') === 'presentacion'])>
