@@ -26,6 +26,7 @@
         @foreach ($registros as $registro)
           @php
             $representantes = ApiPresentaciones::representantesLista($registro);
+            $edadNino = \App\Support\DetalleRegistro::edad($registro->fecha_nacimiento);
           @endphp
           <li
             class="flex flex-col gap-3 px-5 py-4 transition hover:bg-surface-2/60 sm:flex-row sm:items-center sm:gap-4"
@@ -34,6 +35,9 @@
           >
             <div class="min-w-0 flex-1">
               <p class="text-base font-semibold leading-snug break-words text-ink">{{ $registro->nombre_presentado }}</p>
+              @if ($edadNino !== '—')
+                <p class="mt-0.5 text-xs text-muted">{{ $edadNino }}</p>
+              @endif
               @foreach ($representantes as $rep)
                 <p class="mt-1 text-sm break-words text-muted">
                   {{ $rep['parentesco'] }}: {{ $rep['nombre'] }}
