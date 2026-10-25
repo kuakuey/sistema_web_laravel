@@ -68,7 +68,7 @@
       <x-ui.table>
         <x-slot:head>
           @if ($seccion === 'generales')
-            <th>Sección</th><th class="col-prio">Nombre</th><th>Contacto</th><th>Hora</th><th class="col-acciones text-right">Acciones</th>
+            <th class="col-prio">Tipo</th><th>Nombre</th><th>Contacto</th><th>Hora</th><th class="col-acciones text-right">Acciones</th>
           @elseif ($esPresentaciones)
             <th class="col-prio">Niño</th><th>Contactos</th><th>Progreso</th><th>Fecha</th><th class="col-acciones text-right">Acciones</th>
           @else
@@ -82,8 +82,11 @@
         @foreach ($registros as $registro)
           @if ($seccion === 'generales')
             <tr>
-              <td><x-ui.badge>{{ $etiquetas[$registro['seccion']] ?? $registro['seccion'] }}</x-ui.badge></td>
-              <td class="col-prio font-medium">{{ $registro['nombre'] }}</td>
+              <td class="col-prio">
+                <x-ui.badge>{{ $etiquetas[$registro['seccion']] ?? $registro['seccion'] }}</x-ui.badge>
+                <p class="mt-1 font-medium sm:hidden">{{ $registro['nombre'] }}</p>
+              </td>
+              <td class="font-medium">{{ $registro['nombre'] }}</td>
               <td @class(['celda-wrap' => ($registro['origen'] ?? '') === 'presentacion'])>
                 @if (($registro['origen'] ?? '') === 'presentacion' && isset($registro['modelo']))
                   {!! \App\Support\DetalleRegistro::contactosPresentacion($registro['modelo']) !!}

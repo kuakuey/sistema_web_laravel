@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consejeria;
 use App\Models\Inscripcion;
+use App\Models\NetworkingEmprendedor;
+use App\Models\Ofrenda;
 use App\Models\PresentacionNino;
+use App\Models\ValorAdicional;
 use App\Support\Actividad;
 use App\Support\ApiPresentaciones;
+use App\Support\DetalleRegistro;
+use App\Support\Eventos;
 use App\Support\Permisos;
 use App\Support\Texto;
 use Illuminate\Contracts\View\View;
@@ -578,6 +584,99 @@ class RegistroController extends Controller
                         'seccion' => 'presentaciones',
                         'nombre' => $fila->nombre_presentado,
                         'detalle' => $fila->telefono_papa,
+                        'creado_en' => $fila->creado_en,
+                        'modelo' => $fila,
+                    ])
+            );
+        }
+
+        if (Permisos::tieneSeccion($rol, 'ofrendas')) {
+            $filas = $filas->merge(
+                Ofrenda::query()
+                    ->whereBetween('creado_en', [$desde, $hasta])
+                    ->orderByDesc('creado_en')
+                    ->get()
+                    ->map(fn (Ofrenda $fila) => [
+                        'origen' => 'ofrenda',
+                        'id' => $fila->id,
+                        'seccion' => 'ofrendas',
+                        'nombre' => $fila->casa_vida ?: '—',
+                        'detalle' => DetalleRegistro::dinero($fila->monto),
+                        'creado_en' => $fila->creado_en,
+                        'modelo' => $fila,
+                    ])
+            );
+        }
+
+        if (Permisos::tieneSeccion($rol, 'valores_adicionales')) {
+            $filas = $filas->merge(
+                ValorAdicional::query()
+                    ->sinEventos()
+                    ->whereBetween('creado_en', [$desde, $hasta])
+                    ->orderByDesc('creado_en')
+                    ->get()
+                    ->map(fn (ValorAdicional $fila) => [
+                        'origen' => 'valor',
+                        'id' => $fila->id,
+                        'seccion' => 'valores_adicionales',
+                        'nombre' => $fila->nombre,
+                        'detalle' => trim(($fila->tipo ?: '').' · '.DetalleRegistro::dinero($fila->valor), ' ·'),
+                        'creado_en' => $fila->creado_en,
+                        'modelo' => $fila,
+                    ])
+            );
+        }
+
+        if (Permisos::tieneSeccion($rol, 'eventos')) {
+            $filas = $filas->merge(
+                ValorAdicional::query()
+                    ->with('evento')
+                    ->where('tipo', Eventos::TIPO)
+                    ->whereBetween('creado_en', [$desde, $hasta])
+                    ->orderByDesc('creado_en')
+                    ->get()
+                    ->map(fn (ValorAdicional $fila) => [
+                        'origen' => 'participante',
+                        'id' => $fila->id,
+                        'seccion' => 'eventos',
+                        'nombre' => $fila->nombre,
+                        'detalle' => $fila->evento?->nombre ?: ($fila->telefono ?: '—'),
+                        'creado_en' => $fila->creado_en,
+                        'modelo' => $fila,
+                    ])
+            );
+        }
+
+        if (Permisos::tieneSeccion($rol, 'networking')) {
+            $filas = $filas->merge(
+                NetworkingEmprendedor::query()
+                    ->whereBetween('creado_en', [$desde, $hasta])
+                    ->orderByDesc('creado_en')
+                    ->get()
+                    ->map(fn (NetworkingEmprendedor $fila) => [
+                        'origen' => 'networking',
+                        'id' => $fila->id,
+                        'seccion' => 'networking',
+                        'nombre' => $fila->nombre,
+                        'detalle' => $fila->empresa ?: ($fila->whatsapp ?: '—'),
+                        'creado_en' => $fila->creado_en,
+                        'modelo' => $fila,
+                    ])
+            );
+        }
+
+        if (Permisos::tieneSeccion($rol, 'consejeria')) {
+            $filas = $filas->merge(
+                Consejeria::query()
+                    ->whereBetween('creado_en', [$desde, $hasta])
+                    ->orderByDesc('creado_en')
+                    ->get()
+                    ->map(fn (Consejeria $fila) => [
+                        'origen' => 'consejeria',
+                        'id' => $fila->id,
+                        'seccion' => 'consejeria',
+                        'nombre' => $fila->nombre_completo,
+                        'detalle' => $fila->telefono,
                         'creado_en' => $fila->creado_en,
                         'modelo' => $fila,
                     ])

@@ -430,6 +430,11 @@ class DetalleRegistro
         return match ($registro['origen'] ?? '') {
             'inscripcion' => $modelo instanceof Inscripcion ? self::inscripcion($modelo) : [],
             'presentacion' => $modelo instanceof PresentacionNino ? self::presentacion($modelo) : [],
+            'ofrenda' => $modelo instanceof Ofrenda ? self::ofrenda($modelo) : [],
+            'valor' => $modelo instanceof ValorAdicional ? self::valor($modelo) : [],
+            'participante' => $modelo instanceof ValorAdicional ? self::participante($modelo) : [],
+            'networking' => $modelo instanceof NetworkingEmprendedor ? self::networking($modelo) : [],
+            'consejeria' => $modelo instanceof Consejeria ? self::consejeria($modelo) : [],
             default => [],
         };
     }
@@ -439,6 +444,11 @@ class DetalleRegistro
         $prefijo = match ($registro['origen'] ?? '') {
             'inscripcion' => 'Inscripción',
             'presentacion' => 'Presentación',
+            'ofrenda' => 'Ofrenda',
+            'valor' => 'Valor adicional',
+            'participante' => 'Participante',
+            'networking' => 'Networking',
+            'consejeria' => 'Consejería',
             default => 'Registro',
         };
 
