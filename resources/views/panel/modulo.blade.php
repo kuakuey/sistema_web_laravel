@@ -39,12 +39,18 @@
 
 @if ($registros)
   <x-ui.filters>
-  <form method="GET" class="grid gap-3 {{ $seccion === 'valores_adicionales' ? 'sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]' : 'sm:grid-cols-[minmax(0,1fr)_auto]' }}">
+  <form method="GET" class="grid gap-3 {{ $seccion === 'valores_adicionales' ? 'sm:grid-cols-[minmax(0,1fr)_12rem_10rem_10rem_auto]' : 'sm:grid-cols-[minmax(0,1fr)_auto]' }}">
     <div class="relative">
       <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
       <input class="input pl-9" type="search" name="buscar" value="{{ $buscar }}" placeholder="Buscar" aria-label="Buscar">
     </div>
     @if ($seccion === 'valores_adicionales')
+      <select class="input" name="tipo" aria-label="Tipo">
+        <option value="">Todos los tipos</option>
+        @foreach ($tiposValor ?? [] as $tipo)
+          <option value="{{ $tipo->clave }}" @selected(request('tipo') === $tipo->clave)>{{ $tipo->etiqueta }}</option>
+        @endforeach
+      </select>
       <input class="input" type="date" name="fecha_desde" value="{{ request('fecha_desde') }}" aria-label="Desde">
       <input class="input" type="date" name="fecha_hasta" value="{{ request('fecha_hasta') }}" aria-label="Hasta">
     @endif

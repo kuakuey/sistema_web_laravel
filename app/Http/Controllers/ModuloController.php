@@ -214,6 +214,7 @@ class ModuloController extends Controller
                         $grupo->where('nombre', 'like', $like)->orWhere('telefono', 'like', $like)->orWhere('tipo', 'like', $like);
                     });
                 })
+                ->when($request->filled('tipo'), fn ($consulta) => $consulta->where('tipo', $request->query('tipo')))
                 ->when($request->filled('fecha_desde'), fn ($consulta) => $consulta->whereDate('fecha', '>=', $request->query('fecha_desde')))
                 ->when($request->filled('fecha_hasta'), fn ($consulta) => $consulta->whereDate('fecha', '<=', $request->query('fecha_hasta')))
                 ->orderByDesc('fecha')
