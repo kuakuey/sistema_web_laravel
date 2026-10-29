@@ -111,6 +111,22 @@ class EventoController extends Controller
         return redirect()->route('eventos.catalogo')->with('ok', 'Evento actualizado correctamente.');
     }
 
+    public function alternarEstado(Request $request, Evento $evento): RedirectResponse
+    {
+        abort_unless(Permisos::puedeAgregarEventos($request->user()->rolNormalizado()), 403);
+
+        $evento->habilitado = ! $evento->habilitado;
+        $evento->save();
+
+        $etiqueta = $evento->habilitado ? 'Habilitar evento' : 'Deshabilitar evento';
+        Actividad::registrar('estado_evento', 'eventos', 'evento', $evento->id, $etiqueta);
+
+        return redirect()->route('eventos.catalogo')->with(
+            'ok',
+            $evento->habilitado ? 'Evento habilitado.' : 'Evento deshabilitado.'
+        );
+    }
+
     public function eliminarEvento(Request $request, Evento $evento): RedirectResponse
     {
         abort_unless(Permisos::controlTotal($request->user()->rolNormalizado()), 403);
@@ -302,14 +318,20 @@ class EventoController extends Controller
 
         try {
             if (in_array($pestana, ['eventos', 'registros'], true) || $eventoParticipantes) {
-                $catalogo = Evento::query()->with(['tiposEntrada', 'camposAdicionales'])->withCount('registros')->orderBy('nombre')->get();
+                $catalogo = Evento::query()
+                    ->with(['tiposEntrada', 'camposAdicionales'])
+                    ->withCount('registros')
+                    ->orderByDesc('creado_en')
+                    ->orderByDesc('id')
+                    ->get();
             }
 
             if ($pestana === 'registros') {
                 $habilitados = Evento::query()
                     ->with(['tiposEntrada', 'camposAdicionales'])
                     ->where('habilitado', true)
-                    ->orderBy('nombre')
+                    ->orderByDesc('creado_en')
+                    ->orderByDesc('id')
                     ->get();
             }
 

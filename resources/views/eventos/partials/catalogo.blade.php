@@ -17,7 +17,7 @@
         <th class="col-acciones text-right">Acciones</th>
       </x-slot:head>
       @foreach ($catalogo as $evento)
-        <tr>
+        <tr @class(['fila-deshabilitada' => ! $evento->habilitado])>
           <td class="col-prio font-medium">
             @if ($puedeVerParticipantes)
               <a class="text-accent hover:underline" href="{{ route('eventos.participantes', $evento->slug()) }}">{{ $evento->nombre }}</a>
@@ -29,26 +29,28 @@
           <td class="celda-wrap">{{ \App\Support\Eventos::formatearTipos($evento) }}</td>
           <td>{{ $evento->requiere_numeracion ? 'Sí' : 'No' }}</td>
           <td>
-            <x-ui.badge :tone="$evento->habilitado ? 'success' : 'neutral'">
+            <x-ui.badge :tone="$evento->habilitado ? 'success' : 'danger'">
               {{ $evento->habilitado ? 'Habilitado' : 'Deshabilitado' }}
             </x-ui.badge>
           </td>
           <td class="tabular-nums">{{ $evento->registros_count }}</td>
           <td class="col-acciones">
             <div class="flex items-center justify-end gap-1">
-              @if ($puedeVerInforme)
-                <x-ui.button href="{{ route('eventos.informe.pdf', $evento) }}" size="sm" variant="ghost" icon="file-earmark-pdf" aria-label="Descargar PDF"></x-ui.button>
-                <x-ui.button href="{{ route('eventos.informe.excel', $evento) }}" size="sm" variant="ghost" icon="file-earmark-excel" aria-label="Descargar Excel"></x-ui.button>
-                <x-ui.button href="{{ route('eventos.informe', $evento) }}" size="sm" variant="ghost" icon="file-earmark-text" aria-label="Informe"></x-ui.button>
-              @endif
               @if ($puedeAgregar)
                 <x-ui.button type="button" size="sm" variant="ghost" icon="pencil" :data-modal-open="'editar-evento-'.$evento->id" aria-label="Editar"></x-ui.button>
+                <form method="POST" action="{{ route('eventos.estado', $evento) }}">
+                  @csrf
+                  <x-ui.button
+                    type="submit"
+                    size="sm"
+                    variant="ghost"
+                    :icon="$evento->habilitado ? 'eye-off' : 'eye'"
+                    :title="$evento->habilitado ? 'Deshabilitar' : 'Habilitar'"
+                    :aria-label="$evento->habilitado ? 'Deshabilitar' : 'Habilitar'"
+                  ></x-ui.button>
+                </form>
               @endif
               @if ($puedeEditar)
-                <form method="POST" action="{{ route('eventos.vaciar', $evento) }}" data-confirm="¿Eliminar todos los registros de este evento? El evento se conserva.">
-                  @csrf @method('DELETE')
-                  <x-ui.button type="submit" size="sm" variant="ghost" icon="eraser" aria-label="Vaciar registros"></x-ui.button>
-                </form>
                 <form method="POST" action="{{ route('eventos.eliminar', $evento) }}" data-ajax-remove-row data-confirm="¿Eliminar este evento y todos sus registros?">
                   @csrf @method('DELETE')
                   <x-ui.button type="submit" size="sm" variant="danger" icon="trash" aria-label="Eliminar"></x-ui.button>

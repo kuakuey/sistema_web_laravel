@@ -24,9 +24,7 @@
       @if ($puedeVerInforme)
         <x-ui.button href="{{ route('eventos.informe.pdf', $eventoParticipantes) }}" variant="secondary" icon="file-earmark-pdf">PDF</x-ui.button>
         <x-ui.button href="{{ route('eventos.informe.excel', $eventoParticipantes) }}" variant="secondary" icon="file-earmark-excel">Excel</x-ui.button>
-        <x-ui.button href="{{ route('eventos.informe', $eventoParticipantes) }}" variant="secondary" icon="file-earmark-text">Informe</x-ui.button>
       @endif
-      <x-ui.button href="{{ route('eventos.catalogo') }}" variant="secondary">Volver</x-ui.button>
     </div>
   </div>
 @endif

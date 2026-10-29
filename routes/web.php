@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/eventos/catalogo', [EventoController::class, 'index'])->defaults('seccion', 'eventos')->name('eventos.catalogo');
     Route::post('/eventos', [EventoController::class, 'guardarEvento'])->name('eventos.guardar');
     Route::put('/eventos/{evento}', [EventoController::class, 'actualizarEvento'])->name('eventos.actualizar');
+    Route::post('/eventos/{evento}/estado', [EventoController::class, 'alternarEstado'])->name('eventos.estado');
     Route::delete('/eventos/{evento}', [EventoController::class, 'eliminarEvento'])->name('eventos.eliminar');
     Route::delete('/eventos/{evento}/registros', [EventoController::class, 'vaciarRegistros'])->name('eventos.vaciar');
     Route::get('/eventos/{evento}/informe', [EventoController::class, 'informe'])->name('eventos.informe');

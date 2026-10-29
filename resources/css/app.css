@@ -193,6 +193,20 @@
         @apply border-b border-line/70 transition-colors last:border-b-0 hover:bg-surface-2/50;
     }
 
+    .data-table tbody tr.fila-deshabilitada {
+        @apply bg-surface-2/40 hover:bg-surface-2/40;
+    }
+
+    .data-table tbody tr.fila-deshabilitada td:not(.col-acciones) {
+        @apply text-muted;
+        opacity: 0.55;
+        filter: grayscale(0.35);
+    }
+
+    .data-table tbody tr.fila-deshabilitada td:not(.col-acciones) a {
+        @apply text-muted no-underline;
+    }
+
     .data-table tbody td {
         @apply whitespace-nowrap px-4 py-3.5 align-middle text-ink;
     }
