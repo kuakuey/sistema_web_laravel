@@ -111,8 +111,11 @@
         <table class="datos">
           <thead>
             <tr>
-              <th>N°</th>
+              @if (! empty($informe['evento']['requiere_numeracion']))
+                <th>Numeración</th>
+              @endif
               <th>Nombre</th>
+              <th>Teléfono</th>
               <th>Valor</th>
               <th>Estado</th>
               <th>Forma de pago</th>
@@ -126,8 +129,11 @@
           <tbody>
             @foreach ($grupo['registros'] as $registro)
               <tr>
-                <td>{{ \App\Support\Informes::texto($registro['numeracion'] ?? '') }}</td>
+                @if (! empty($informe['evento']['requiere_numeracion']))
+                  <td>{{ \App\Support\Informes::texto($registro['numeracion'] ?? '') }}</td>
+                @endif
                 <td>{{ \App\Support\Informes::texto($registro['nombre'] ?? '') }}</td>
+                <td>{{ \App\Support\Informes::texto($registro['telefono'] ?? '') }}</td>
                 <td><strong>{{ \App\Support\Informes::monto($registro['valor'] ?? 0) }}</strong></td>
                 <td>{{ \App\Support\Informes::etiquetaPago($registro) }}</td>
                 <td>{{ \App\Support\Informes::etiquetaForma($registro['forma_pago'] ?? null) }}</td>
