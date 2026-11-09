@@ -40,6 +40,12 @@
                         $nombre = $campo['name'] ?? null;
                         $valor = ($reabrir && $nombre) ? old($nombre, $campo['value']) : $campo['value'];
                         $inputId = $nombre ? $id.'-'.$nombre : null;
+                        $tipoCampo = $campo['type'] ?? 'text';
+                        $esDecimal = $tipoCampo === 'number' && ($campo['name'] ?? '') !== 'anio_en_cda';
+                        $esEntero = $tipoCampo === 'number' && ! $esDecimal;
+                        if ($esDecimal) {
+                            $tipoCampo = 'text';
+                        }
                     @endphp
                     <div class="space-y-1.5 py-2.5 first:pt-0 last:pb-0">
                         <label @if ($inputId) for="{{ $inputId }}" @endif class="block text-xs font-medium text-muted">
@@ -62,12 +68,13 @@
                                     class="input{{ !empty($campo['readonly']) ? ' bg-surface-2' : '' }}"
                                     id="{{ $inputId }}"
                                     name="{{ $nombre }}"
-                                    type="{{ $campo['type'] ?? 'text' }}"
+                                    type="{{ $tipoCampo }}"
                                     value="{{ $valor }}"
                                     @required(!empty($campo['required']))
                                     @readonly(!empty($campo['readonly']))
                                     @if ($campo['maxlength'] ?? null) maxlength="{{ $campo['maxlength'] }}" @endif
-                                    @if (($campo['type'] ?? '') === 'number') step="{{ ($campo['name'] ?? '') === 'anio_en_cda' ? '1' : '0.01' }}" min="0" @endif
+                                    @if ($esDecimal) inputmode="decimal" autocomplete="off" @endif
+                                    @if ($esEntero) step="1" min="0" @endif
                                     @if (($campo['type'] ?? '') === 'tel') inputmode="tel" @endif
                                 >
                             @endif

@@ -31,7 +31,7 @@
           </x-ui.field>
 
           <x-ui.field label="Valor" name="valor" required>
-            <input class="input" id="valor" name="valor" type="number" min="0" step="0.01" disabled>
+            <input class="input" id="valor" name="valor" type="text" inputmode="decimal" autocomplete="off" disabled>
           </x-ui.field>
 
           <div class="hidden" data-bloque-numeracion>

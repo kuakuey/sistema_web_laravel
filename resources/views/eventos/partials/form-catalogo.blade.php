@@ -32,7 +32,7 @@
           <tr data-fila-tipo>
             <td><input class="input" name="tipo_entrada[nombre][]" required maxlength="100" placeholder="General, VIP…" value="{{ $tipo['nombre'] ?? $tipo->nombre ?? '' }}"></td>
             <td><input class="input" name="tipo_entrada[prefijo][]" maxlength="10" placeholder="VIP" value="{{ $tipo['prefijo'] ?? $tipo->prefijo ?? '' }}"></td>
-            <td><input class="input" name="tipo_entrada[valor][]" type="number" min="0" step="0.01" value="{{ $tipo['valor'] ?? $tipo->valor ?? 0 }}"></td>
+            <td><input class="input" name="tipo_entrada[valor][]" type="text" inputmode="decimal" autocomplete="off" value="{{ $tipo['valor'] ?? $tipo->valor ?? 0 }}"></td>
             <td class="space-y-1">
               <input type="hidden" name="tipo_entrada[visible_publico][]" value="{{ !empty($tipo['visible_publico'] ?? $tipo->visible_publico ?? true) ? '1' : '0' }}" data-visible>
               <input type="hidden" name="tipo_entrada[es_gratis][]" value="{{ !empty($tipo['es_gratis'] ?? $tipo->es_gratis ?? false) ? '1' : '0' }}" data-gratis>

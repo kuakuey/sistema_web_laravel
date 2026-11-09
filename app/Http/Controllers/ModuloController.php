@@ -57,6 +57,8 @@ class ModuloController extends Controller
     {
         abort_unless(Permisos::puedeRegistrar($request->user()->rolNormalizado(), 'ofrendas'), 403);
 
+        $request->merge(['monto' => Texto::decimal($request->input('monto'))]);
+
         $datos = $request->validate([
             'casa_id' => ['required', 'integer', 'exists:casas_vida,id'],
             'fecha_ofrenda' => ['required', 'date'],
@@ -78,6 +80,8 @@ class ModuloController extends Controller
     public function actualizarOfrenda(Request $request, Ofrenda $ofrenda): RedirectResponse
     {
         abort_unless(Permisos::controlTotal($request->user()->rolNormalizado()), 403);
+
+        $request->merge(['monto' => Texto::decimal($request->input('monto'))]);
 
         $datos = $request->validate([
             'casa_id' => ['required', 'integer', 'exists:casas_vida,id'],
@@ -228,6 +232,8 @@ class ModuloController extends Controller
     {
         abort_unless(Permisos::puedeRegistrar($request->user()->rolNormalizado(), 'valores_adicionales'), 403);
 
+        $request->merge(['valor' => Texto::decimal($request->input('valor'))]);
+
         $datos = $request->validate([
             'tipo' => ['required', 'string', 'max:50', 'not_in:'.Eventos::TIPO],
             'nombre' => ['required', 'string', 'max:100'],
@@ -257,6 +263,8 @@ class ModuloController extends Controller
     {
         abort_unless(Permisos::controlTotal($request->user()->rolNormalizado()), 403);
         abort_if($valor->esRegistroEvento(), 404);
+
+        $request->merge(['valor' => Texto::decimal($request->input('valor'))]);
 
         $datos = $request->validate([
             'tipo' => ['required', 'string', 'max:50', 'not_in:'.Eventos::TIPO],

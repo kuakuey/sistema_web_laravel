@@ -165,7 +165,7 @@ class Eventos
             }
 
             $esGratis = ! empty($tipo['es_gratis']);
-            $valor = (float) ($tipo['valor'] ?? 0);
+            $valor = (float) Texto::decimal($tipo['valor'] ?? 0);
 
             if ($esGratis || $valor < 0) {
                 $valor = 0.0;
@@ -323,7 +323,8 @@ class Eventos
         $observacion = Texto::titulo($entrada['observacion'] ?? '');
         $numeracion = trim((string) ($entrada['numeracion'] ?? ''));
         $tipoEntradaId = (int) ($entrada['tipo_entrada_id'] ?? 0);
-        $valor = isset($entrada['valor']) && $entrada['valor'] !== '' ? (float) $entrada['valor'] : null;
+        $valorTexto = Texto::decimal($entrada['valor'] ?? '');
+        $valor = $valorTexto !== '' ? (float) $valorTexto : null;
         $formaPago = trim(mb_strtolower((string) ($entrada['forma_pago'] ?? '')));
         $estadoPago = self::normalizarEstado((string) ($entrada['estado_pago'] ?? ''));
 

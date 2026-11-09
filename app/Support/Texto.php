@@ -19,4 +19,9 @@ class Texto
     {
         return mb_strtolower(trim((string) $email), 'UTF-8');
     }
+
+    public static function decimal(mixed $valor): string
+    {
+        return str_replace(',', '.', trim((string) $valor));
+    }
 }

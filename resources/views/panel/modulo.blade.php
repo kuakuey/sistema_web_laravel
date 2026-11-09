@@ -254,7 +254,7 @@
             <input type="date" class="input" id="fecha_ofrenda" name="fecha_ofrenda" value="{{ old('fecha_ofrenda', now()->toDateString()) }}" required>
           </x-ui.field>
           <x-ui.field label="Monto" name="monto" required>
-            <input type="number" step="0.01" min="0" class="input" id="monto" name="monto" value="{{ old('monto') }}" inputmode="decimal" required>
+            <input type="text" inputmode="decimal" class="input" id="monto" name="monto" value="{{ old('monto') }}" required autocomplete="off">
           </x-ui.field>
         </form>
       @endif
@@ -306,7 +306,7 @@
           <input type="date" class="input" id="fecha" name="fecha" value="{{ old('fecha', now()->toDateString()) }}" required>
         </x-ui.field>
         <x-ui.field label="Valor" name="valor" required>
-          <input type="number" step="0.01" min="0" class="input" id="valor" name="valor" value="{{ old('valor') }}" inputmode="decimal" required>
+          <input type="text" inputmode="decimal" class="input" id="valor" name="valor" value="{{ old('valor') }}" required autocomplete="off">
         </x-ui.field>
         <x-ui.field label="Observación" name="observacion" class="sm:col-span-2">
           <textarea class="input" id="observacion" name="observacion" rows="2">{{ old('observacion') }}</textarea>

@@ -9,6 +9,34 @@ import './presentaciones';
 window.Alpine = Alpine;
 Alpine.start();
 
+function normalizarDecimal(input) {
+    if (!(input instanceof HTMLInputElement) || input.inputMode !== 'decimal') {
+        return;
+    }
+
+    const limpio = input.value.replace(/[^\d.,]/g, '').replace(/,/g, '.');
+    const partes = limpio.split('.');
+    const normalizado = partes.length > 1
+        ? `${partes[0]}.${partes.slice(1).join('')}`
+        : limpio;
+
+    if (input.value === normalizado) {
+        return;
+    }
+
+    const inicio = input.selectionStart;
+    const fin = input.selectionEnd;
+    input.value = normalizado;
+
+    if (inicio !== null && fin !== null) {
+        input.setSelectionRange(inicio, fin);
+    }
+}
+
+document.addEventListener('input', (evento) => {
+    normalizarDecimal(evento.target);
+});
+
 const raiz = document.documentElement;
 
 /* Tema claro / oscuro */
@@ -365,6 +393,8 @@ document.addEventListener('submit', (evento) => {
     if (!(formulario instanceof HTMLFormElement)) {
         return;
     }
+
+    formulario.querySelectorAll('input').forEach((input) => normalizarDecimal(input));
 
     const metodo = (formulario.getAttribute('method') || 'get').toLowerCase();
 
